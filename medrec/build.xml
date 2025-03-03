@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ @author Copyright (c) 2007, @COPYRIGHT_CURRENTYEAR, Oracle and/or its affiliates. All rights reserved.
+ -->
+<project name="medrec-project" default="install" basedir=".">
+
+  <import file="build-preparation.xml"/>
+
+  <target name="clean">
+    <ant dir="${basedir}/modules" inheritAll="false" target="clean"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+
+  <target name="install">
+    <ant dir="${basedir}/modules" inheritAll="false" target="install"/>
+  </target>
+
+  <target name="deploy" description="only for non-mt single server sample">
+    <ant dir="${basedir}/modules" inheritAll="false" target="deploy"/>
+  </target>
+
+  <target name="db.migrate">
+    <ant dir="${basedir}/database-migration" inheritAll="false"/>
+  </target>
+
+  <target name="single.server.sample" description="install MedRec to any domain">
+    <ant dir="${basedir}/install" target="install.single.server.env" inheritAll="false"/>
+  </target>
+
+  <target name="mt.single.server.sample" description="install MedRec on a mt single server domain">
+    <ant dir="${basedir}/install" target="install.mt.single.server.env" inheritAll="false"/>
+  </target>
+
+  <target name="mt.coherence.cluster.sample" description="install MedRec on a mt coherence cluster domain">
+    <ant dir="${basedir}/install" target="install.mt.coherence.cluster.env" inheritAll="false"/>
+  </target>
+
+</project>

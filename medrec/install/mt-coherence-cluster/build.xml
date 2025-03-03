@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ @author Copyright (c) 2007, @COPYRIGHT_CURRENTYEAR, Oracle and/or its affiliates. All rights reserved.
+ -->
+<project name="mt-coherence-cluster" default="install" basedir=".">
+  <property environment="env"/>
+  <property file="${basedir}/weblogic.properties"/>
+  <typedef resource="weblogic/ant/taskdefs/antlib.xml"/>
+
+  <property name="domain.name" value="medrec_mt_coherence_cluster"/>
+  <property name="domain.dir" value="${wls.domain.dir}/${domain.name}"/>
+
+  <property name="coherence.override.file" value="${basedir}/tangosol-coherence-override.xml"/>
+
+  <property name="derby.sys.home" value="${domain.dir}/common/db"/>
+
+  <target name="install" depends="loadmedrecproperties">
+    <antcall target="createDomain"/>
+    <antcall target="data.importer"/>
+    <antcall target="startAdminServer"/>
+    <antcall target="configureCluster"/>
+    <antcall target="configureResources"/>
+    <antcall target="deployApp"/>
+    <antcall target="configureTenant-bayland"/>
+    <antcall target="configureTenant-valley"/>
+    <antcall target="startNodeManager"/>
+    <antcall target="startCluster"/>
+    <antcall target="updateValleyAppearance"/>
+  </target>
+
+  <target name="createDomain">
+    <ant dir="${basedir}/../common" inheritAll="true" target="createDomain">
+    </ant>
+  </target>
+
+  <target name="startAdminServer">
+    <ant dir="${basedir}/../common" inheritAll="true" target="startAdminServer">
+    </ant>
+  </target>
+
+  <target name="stopAdminServer">
+    <ant dir="${basedir}/../common" inheritAll="true" target="stopAdminServer">
+    </ant>
+  </target>
+
+  <target name="configureCluster">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="configureCluster.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password}
+      ${domain.dir} ${wls.nodemanager.dir} ${coherence.override.file} "/>
+    </java>
+  </target>
+
+  <target name="configureResources">
+    <ant dir="${basedir}/../common" inheritAll="true" target="configureAppRGT">
+      <property name="dbDriver" value="${dbDriver}"/>
+      <property name="rgtName" value="appRGT"/>
+    </ant>
+  </target>
+
+  <target name="deployApp">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="appDeploy.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}"/>
+    </java>
+  </target>
+
+  <target name="startNodeManager">
+    <ant dir="${basedir}/../common" inheritAll="true" target="startNodeManager">
+    </ant>
+  </target>
+
+  <target name="stopNodeManager">
+    <ant dir="${basedir}/../common" inheritAll="true" target="stopNodeManager">
+    </ant>
+  </target>
+
+  <target name="configureTenant-bayland">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="newMTTenant.py
+      ${admin.server.host} ${admin.server.port} bayland.weblogicmt.com ${admin.server.username} ${admin.server.password}
+      bayland ${dbURL1} ${dbUser1} ${dbPassword1} "/>
+    </java>
+    <ant dir="${basedir}/../common" inheritAll="true" target="startPartition">
+      <property name="partition.name" value="bayland"/>
+    </ant>
+  </target>
+
+  <target name="configureTenant-valley">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="newMTTenant.py
+      ${admin.server.host} ${admin.server.port} valley.weblogicmt.com ${admin.server.username} ${admin.server.password}
+      valley ${dbURL2} ${dbUser2} ${dbPassword2} "/>
+    </java>
+    <ant dir="${basedir}/../common" inheritAll="true" target="startPartition">
+      <property name="partition.name" value="valley"/>
+    </ant>
+  </target>
+
+  <target name="startCluster">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="startCluster.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}
+      ${domain.name} ${nodemanager.dir}"/>
+    </java>
+  </target>
+
+  <target name="stopCluster">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="false">
+      <arg line="stopCluster.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}
+      ${domain.name} ${nodemanager.dir}"/>
+    </java>
+  </target>
+
+  <target name="data.importer.standalone" depends="loadmedrecproperties, data.importer"/>
+
+  <target name="data.importer">
+    <ant dir="../../modules/medrec-data-import" inheritAll="false" target="data.importer.specific">
+      <property name="db.url" value="${dbURL1}"/>
+      <property name="db.driver" value="${dbInitDriver}"/>
+      <property name="db.user" value="${dbUser1}"/>
+      <property name="db.password" value="${dbPassword1}"/>
+    </ant>
+    <ant dir="../../modules/medrec-data-import" inheritAll="false" target="data.importer.specific">
+      <property name="db.url" value="${dbURL2}"/>
+      <property name="db.driver" value="${dbInitDriver}"/>
+      <property name="db.user" value="${dbUser2}"/>
+      <property name="db.password" value="${dbPassword2}"/>
+    </ant>
+  </target>
+
+  <target name="loadmedrecproperties" depends="loadoracleroperties, loadderbyproperties">
+  </target>
+
+  <target name="loadoracleroperties" unless="nopdb">
+    <property file="${basedir}/oracle.properties"/>
+  </target>
+
+  <target name="loadderbyproperties" if="nopdb">
+    <property file="${basedir}/derby.properties"/>
+    <antcall target="derby.stop"/>
+    <antcall target="derby.start"/>
+  </target>
+
+  <target name="derby.start">
+    <ant dir="${basedir}/../common" inheritAll="true" target="derby.start">
+    </ant>
+  </target>
+
+  <target name="derby.stop">
+    <ant dir="${basedir}/../common" inheritAll="true" target="derby.stop">
+    </ant>
+  </target>
+
+  <target name="start">
+    <antcall target="derby.start"/>
+    <antcall target="startAdminServer"/>
+    <antcall target="startNodeManager"/>
+    <antcall target="startCluster"/>
+  </target>
+
+  <target name="stop">
+    <antcall target="stopCluster"/>
+    <antcall target="stopNodeManager"/>
+    <antcall target="stopAdminServer"/>
+    <antcall target="derby.stop"/>
+  </target>
+
+  <target name="updateValleyAppearance">
+    <ant dir="${basedir}/../common" inheritAll="true" target="updateAppearance">
+      <property name="partition" value="valley"/>
+    </ant>
+  </target>
+
+</project>

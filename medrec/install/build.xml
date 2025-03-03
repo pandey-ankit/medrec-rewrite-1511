@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    @author Copyright (c) 2007, @COPYRIGHT_CURRENTYEAR, Oracle and/or its affiliates. All rights reserved.
+-->
+<project name="medrec-project" basedir=".">
+
+  <import file="../build-preparation.xml"/>
+
+  <target name="install.single.server.env">
+    <ant dir="${basedir}/non-mt-single-server" inheritAll="false" target="install"/>
+  </target>
+
+  <target name="install.mt.single.server.env">
+    <ant dir="${basedir}/mt-single-server" inheritAll="false" target="install"/>
+  </target>
+
+  <target name="install.mt.coherence.cluster.env">
+    <ant dir="${basedir}/mt-coherence-cluster" inheritAll="false" target="install"/>
+  </target>
+
+</project>

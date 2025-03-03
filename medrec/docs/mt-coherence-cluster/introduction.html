@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>MedRec Multi-Tenancy Coherence Cluster Domain</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+
+<img src="./coherence_cluster.jpg" width="800" height="600"/>
+
+<br/><br/>
+
+<p>
+  This diagram illustrates the MT Coherence Cluster domain created by the installation scripts. This section explains the process of the installation script steps to help you understand the sample.
+</p>
+
+<ol>
+  <li>Imports sample data into the Oracle database:
+    <p>
+      If you want to re-import data, change to the <code>@MEDREC_HOME/install/mt-coherence-cluster</code> directory, and then run:
+    </p>
+<pre>
+  <code>ant data.importer</code>
+</pre>
+<p>If you do not have Oracle PDBs, you can use Derby as database, run:</p>
+<pre>
+  <code>ant data.importer -Dnopdb=true</code>
+</pre>
+  </li>
+  <li>Creates a clean WebLogic domain named medrec_mt_coherence_cluster with an Administration Server at <code>
+    @MW_HOME/user_projects/domains/medrec_mt_coherence_cluster</code>, and then starts the Administration Server.
+  </li>
+  <li>Creates a admin user in the default security realm: username = administrator; password = administrator123.</li>
+  <li>
+    Configures clusters:
+    <p>
+    <ul>
+      <li>Creates a dynamic WebLogic cluster (app_cluster) with two managed servers (ServersStartPort 7020), and a dynamic WebLogic
+        cluster (cache_cluster) with two managed servers (ServersStartPort 7050).
+      </li>
+      <li>Creates a Coherence cluster that targets app_cluster and cache_cluster.</li>
+      <li>Sets app_cluster to be local-storage disabled for the Coherence cluster.</li>
+      <li>Sets cache_cluster to be local-storage enabled for the Coherence cluster. This means the Coherence cluster stores
+        data only on servers belonging to the cache_cluster.
+      </li>
+      <li>Creates resource group templates, appRGT and cacheRGT, for each WebLogic cluster.</li>
+    </ul>
+    </p>
+  </li>
+  <li>
+    Configures an application resource group template:
+    <p>
+    <ul>
+      <li>Creates a mail session targeting appRGT. This is a dummy mail session, so you don't have to provide a real mail
+        server.
+      </li>
+      <li>Creates an JDBC system resource named MedRecGlobalDataSourceXA that targets appRGT.</li>
+      <li>Creates JMS server that targets appRGT.</li>
+      <li>Creates JMS system resource sub-deployment that targets MedRecJMSServer.</li>
+      <li>Creates a JMS connection factory in the MedRecModule.</li>
+      <li>Creates a JMS uniform distributed queue in the MedRecModule.</li>
+    </ul>
+    </p>
+  </li>
+  <li>
+    Deploys applications:
+    <p>
+    <ul>
+      <li>Deploys the MedRec application located at 
+        <code>@MEDREC_HOME/modules/medrec/medrec-assembly/target/medrec.ear</code> that targets appRGT.
+      </li>
+      <li>Deploys a physician application located at <code>
+        @MEDREC_HOME/modules/physician/physician-assembly/target/physician-coherence.ear</code> that targets appRGT.
+      </li>
+      <li>Deploys a chat room located at <code>@MEDREC_HOME/modules/chat/target/chat.war</code> that targets appRGT. 
+	  This  web socket sample is not based on HA so that members can't see each other at different managed server.
+      </li>
+      <li>Deploys a GAR located at <code>@MEDREC_HOME/modules/gar/target/medrecGAR.gar</code> that targets cacheRGT.</li>
+    </ul>
+    </p>
+  </li>
+  <li>
+    Configures the "bayland" tenant:
+    <p>
+    <ul>
+      <li>Creates a virtual target VT-App-bayland with host name <code>bayland.weblogicmt.com</code> that targets app_cluster.</li>
+      <li>Creates a virtual target VT-Cache-bayland that targets cache_cluster.</li>
+      <li>Creates a partition named bayland.</li>
+      <li>Creates cache config beans on caches on the bayland partition. SharedCache can cross partitions. MethodCache is
+        scoped to one partition, so it cannot cross them.
+      </li>
+      <li>Sets JDBC overrides of data source MedRecGlobalDataSourceXA with the DB properties.</li>
+      <li>Associates appRGT and cacheRGT with the bayland partition: app resource group targets VT-App-bayland; cache
+        resource group targets VT-Cache-bayland.
+      </li>
+    </ul>
+    </p>
+  </li>
+  <li>Configures a "valley" tenant similar to the "bayland" tenant.</li>
+  <li>
+    Configures a JBatch repository:
+    <p>
+    <ul>
+      <li>Creates three Derby DB schemas for the JBatch component.</li>
+      <li>Creates a global JDBC system resource named batchDS that targets app_cluster.</li>
+      <li>Creates a JDBC system resource named batchMTDS that targets appRGT for both the bayland and valley partitions.</li>
+      <li>Sets JDBC overrides for each partition.</li>
+      <li>Creates a data source proxy that links global and partition JBatch data sources.</li>
+      <li>Updates the JBatch domain configuration.</li>
+    </ul>
+    </p>
+  </li>
+  <li>Restarts the Administration Server:</li>
+  <li>Overrides the medrec.ear with a deployment plan. For more details, review the <a href="javascript:reloadTOC('../mt/resource-override.html')">Resource Overriding</a> overview.</li>
+  <li>Enrolls and starts the Node Manager.</li>
+  <li>Starts the cache_cluster and app_cluster clusters.</li>
+</ol>
+<p>
+  For more details, reveiw the <code>@MW_HOME/user_projects/domains/medrec_mt_coherence_cluster/config/config.xml</code> file for the WebLogic domain.
+</p>
+
+<h2>Coherence Cache</h2>
+
+<p>
+  The physician archive is set to a web service(JAX-RS and JAX-WS) client application. There aren't any JPA artifacts in
+  physician.ear; they are all on the server side. So leveraging Coherence Cache here can avoid frequent web service and JDBC invocations in business services on the web service server side.
+</p>
+
+<h3>MethodCache</h3>
+
+<p>
+  This cache is partitioned-scoped to one tenant. Most of the business services for the physician scenarios are annotated with method
+  invocation cache interceptors, so they first check whether the data was stored in the cache. If the data isn't cached, the service gets the data via the web service. It then stores returned data into the method cache. After that, ensuing invocations with the same parameter values will fetch data directly from the cache.
+</p>
+
+<p>
+  When is the data removed from the method cache? For example, a physician can look at a patient's record summary, which is
+  cached after first getting the data, and then creates a new record for this patient. At this point, the record summary in the cache is already inaccurate, so the stale data should be cleaned out. In this case, after successfully creating the new record, the business service will fire an update event to remove the old data.
+</p>
+
+<p>Actually, the method invocation cache actually has three different types. MedRec can be aware of the WebLogic Server environment and activate the corresponding cache. Almost all of business services of physician application use the method cache.
+</p>
+
+<p>
+  Let's look at the physician app as an example. When you first log in as physician at bayland app server 1, the <code>app_cluster-1.log</code> should look like this:
+<pre>
+  <code>Method Invocation Coherence Cache is available.</code>
+  <code>Checking method XXXX invocation cache...</code>
+  <code>Cannot find the result.</code>
+  <code>Caching the result in method XXXX invocation cache....</code>
+  <code>Added result to cache</code>
+  <code>Method: XXXXX</code>
+  <code>Parameters: XXXX</code>
+  <code>Result: XXXXX</code>
+</pre>
+</p>
+<p>
+  Next, log out and change to bayland server 2 and log in. The <code>app_cluster-2.log</code> should look like this:
+<pre>
+  <code>Checking method XXXX invocation cache...</code>
+  <code>Found result in cache</code>
+  <code>Method: XXXXX</code>
+  <code>Parameters: XXXX</code>
+  <code>Result: XXXXX</code>
+</pre>
+</p>
+
+<h3>SharedCache</h3>
+
+<p>
+  This cache is a partition-shared cache, which means that both bayland and valley can share it. However, it is still using the "creating record" use-case. A physician can create prescriptions for a new record, and when choosing a drug, accesses a drug information list from the database on the server side. This list is stable invariable data that can be shared with both partitions. So the drug information list is stored in this cache.
+</p>
+<p>
+  For example, when using the "Create a new record" page in your browser at bayland server 1, <code>the app_cluster-1.log</code> should like this:
+<pre>
+  <code>Drug info list is not stored in shared cache.</code>
+  <code>Fetch list from server end point.</code>
+  <code>Store drug info list into shared cache.</code>
+</pre>
+</p>
+<p>
+  When you repeat this process on valley server 2, the <code>app_cluster-2.log</code> should like this:
+<pre>
+  <code>Drug info list has already stored in shared cache.</code>
+</pre>
+</p>
+<p>
+  This log entry verifies that this is a shared cache over partitions.
+</p>
+
+<br/><br/>
+<hr/>
+<p>
+  Copyright 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved.
+</p>
+
+</body>
+</html>

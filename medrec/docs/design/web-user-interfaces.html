@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<style type="text/css">
+  .style1 {
+    font-family: "Courier New", Courier, mono
+  }
+</style>
+
+<head>
+  <title>Web User Interfaces</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>Like facades, Web user interfaces (or Web UIs for short) also serve as the entrance for remote clients, and reside in
+  the boundary of the application. But these remote clients are mostly Web browsers manipulated by actual human
+  beings, rather than other applications or services. </p>
+
+<p>Unlike other Web applications, the MedRec Web UIs are responsible only for handling the Web-related presentation
+  logic, just like the facades handle only remote invocation logic. MedRec Web UIs never contain the core business
+  logic and never directly interact with the persistence APIs to access databases because, due to the MedRec layered
+  architecture, there are backend domain models dedicated to this work. This architecture is very suitable to
+  full-fledged enterprise applications, where the business logic is complex, advanced middleware services are
+  required, multiple types of remote clients are present, and so on. </p>
+
+<p>MedRec has very simple authorization requirements: only users that successfully log in can enter the Web application.
+  MedRec uses filter servlets to intercept the requests to the protected URLS that match the predefined patterns and
+  then check if the corresponding user exists in the HTTP session. If no correct user is found, the filter servlet
+  redirects the requests to the login page for that type of user. This authorization mechanism is suitable for
+  applications with relatively simple authorization requirements, such as MedRec; for more complex requirements, an
+  application should implement a more sophisticated mechanism, use the security services provided by the container, or
+  use a third-party security framework. The authentication of administrator just adopt container security services</p>
+
+<h2>Java Server Faces </h2>
+
+<p>In MedRec, the Web UIs are mostly based on the Java Server Faces (JSF) framework and follow the popular
+  Model-View-Controller pattern. </p>
+
+<p>The Model part mostly consists of our JSF backing beans. In MedRec, backing beans are referred to as <em>page
+  controllers</em>, although they do not use the actual Page Controller pattern but rather, use the popular Front
+  Controller pattern along with additional features of the Page Controller pattern. The page controllers are mainly
+  responsible for handling user inputs, data validation, data conversion, and so on, as well as returning the
+  resulting data, messages, etc to the Web client. They get access to the services to which they delegate the actual
+  business processing by using dependency injection. Typically, a single page controller corresponds to one use case,
+  although some page controllers contain actions for multiple use cases. This is because those use cases are closely
+  related to each other, and we can simplify our implementations if we include them in a single class. </p>
+
+<p>The page controllers normally require common technical features, such as getting I18N messages from resource bundles,
+  invalidating sessions, etc, which the JSF technology does not provide support. To solve this issue, MedRec provides
+  a PageContext object that wraps the JSF FacesContext object but provides additional convenience methods that hide
+  the complexity of implementing these features. MedRec also provides an abstract base page controller from which all
+  the page controllers of MedRec inherit and through which the page controllers get access to the PageContext object.
+  The reasons for not putting the convenience methods into the abstract base page controller are as follows:</p>
+<ul>
+  <li>it is much easier to do unit testing against the page controller instances if a separate object includes the
+    convenience methods, rather than having to deal with methods defined in the super class.
+  </li>
+  <li>It is easier for Web artifacts other than the page controllers, such as the filter servlet, to use these
+    convenience methods if they are defined in the PageContext object.
+  </li>
+</ul>
+<p><strong>Note</strong>: MedRec uses a variety of ways to work around known JSF limitations in the implementations of
+  its Web UIs. For example, some page controllers store the return values of the services in the HTTP session because,
+  in the JSF implementation used by Medrec, the JSF command link does not work properly inside a JSF data table.
+  Depending on the implementation of JSF you use, you might find other solutions to these limitations.</p>
+
+<p>The View part of the Model-View-Controller design pattern mostly consists of XHTML pages, which are responsible for
+  rendering the actual UIs to users. The standard UI components of JSF are used extensively in these pages, and they
+  are typically associated with the fields of the backend page controllers through the JSF expression language, so
+  that the View part can exchange data with the Model part. Because of these UI components, MedRec rarely deals
+  directly with HTML in the XHTML pages. Additionally, MedRec programmers can use an IDE to help with the
+  component-based UI development, similar to standard desktop GUI development. Even without an IDE, these components
+  alleviate the pain of creating XHTML pages because, compared to primitive XHTML, they have higher-level tags with a
+  powerful expression language, making it easy to create elegant and readable pages by hand, similar to writing
+  well-defined XML configuration files.</p>
+
+<p>The Controller part of the Model-View-Controller design pattern is provided by the JSF framework, which features a
+  front controller servlet dispatching the incoming requests according to the MedRec configurations. The standard
+  <span class="style1">faces-config.xml</span> file defines all the page controllers and navigation rules that
+  together assemble the Model, View, and Controller parts into a whole. The XML file also includes a custom JSF phase
+  listener that transparently disables the browser's cache for all the HTTP responses from MedRec so that users never
+  see stale pages.</p>
+
+<p>MedRec provides I18n support so that users in different locales can view the pages in their native language. In the
+  JSF-based Web UIs, all visible text is loaded from resource files that live outside of the Java code, regardless of
+  whether the text is generated by the page listeners or XHTML pages. The name of the resource files all start with
+  &quot;LocalizationResources&quot; and are added to the CLASSPATH of the Web applications with different suffixes. In
+  general, one native language corresponds to one suffix; for example, Simplified Chinese corresponds to &quot;zh_CN&quot;.
+  The Java I18N sub-system then looks for a message of a particular language based on the suffix. The page controllers
+  load these messages using the convenience methods of the PageContext object; the XHTML pages load the messages using
+  the JSF component tags. </p>
+
+<h2>RESTful </h2>
+
+<p>In MedRec, Batch scene adopts RESTful to manage report repository of statistics. Files are identified by URIs, which
+  provide a global addressing space for resource and service discovery.</p>
+
+<p>Resources are manipulated using a fixed set of four create, read, update, delete operations: PUT, GET, POST, and
+  DELETE. PUT creates a new resource, which can be then deleted by using DELETE. GET retrieves the current state of a
+  resource in some representation. POST transfers a new state onto a resource. It's convenient to request at
+  JavaScript.</p>
+
+<h2>Server-sent Event Handler</h2>
+
+<p>In MedRec, at the same Batch scene, browsers get notice of finished files of statistics from server via SSE.</p>
+
+<p>A server-sent event is when a web page automatically gets updates from a server. So it is well received at the scene
+  of only pushing data from server. However, SSE can not satisfy your requirements of sending data from browser at the
+  same time. If you expect bidirectional communication, Websocket is the best choice then.</p>
+
+<h2>Server Endpoint Of Websocket </h2>
+
+<p>In MedRec, it is no doubt that chat room is based on Websocket technology. MedRec uses Server Endpoints to handle
+  diverse interactions.</p>
+
+<p>In the traditional request-response model used in HTTP, the client requests resources, and the server provides
+  responses. The exchange is always initiated by the client; the server cannot send any data without the client
+  requesting it first. This model worked well for the World Wide Web when clients made occasional requests for
+  documents that changed infrequently, but the limitations of this approach are increasingly relevant as content
+  changes quickly and users expect a more interactive experience on the Web. The WebSocket protocol addresses these
+  limitations by providing a full-duplex communication channel between the client and the server. Combined with other
+  client technologies, such as JavaScript and HTML5, WebSocket enables web applications to deliver a richer user
+  experience.</p>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/wbapp/configurejsfandjtsl.html">WebLogic Server JSF Documentation</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/wlprg/websockets.html" target="_blank">Using WebSockets in WebLogic Server</a></li>
+</ul>
+<p>&nbsp; </p>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

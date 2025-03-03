@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<deployment-plan xmlns="http://xmlns.oracle.com/weblogic/deployment-plan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.oracle.com/weblogic/deployment-plan http://xmlns.oracle.com/weblogic/deployment-plan/1.0/deployment-plan.xsd">
+  <application-name>physician</application-name>
+  <variable-definition>
+   <variable>
+     <name>target</name>
+     <value>coherence_cluster</value>
+   </variable>
+  </variable-definition>
+  <module-override>
+    <module-name>physician-coherence.ear</module-name>
+    <module-type>ear</module-type>
+    <module-descriptor external="false">
+      <root-element>application</root-element>
+      <uri>META-INF/application.xml</uri>
+      <variable-assignment>
+        <name>target</name>
+        <xpath>/application/env-entry[env-entry-name="java:app/com.oracle.medrec.target"]/env-entry-value</xpath>
+      </variable-assignment>
+    </module-descriptor>
+  </module-override>
+</deployment-plan>

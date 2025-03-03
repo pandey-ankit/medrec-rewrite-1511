@@ -1,0 +1,1 @@
+Thank you for experience MedRec Samples. Please see ./docs/introduction.html.

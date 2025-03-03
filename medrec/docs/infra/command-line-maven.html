@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Maven Build Process</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>The command-line build process is based on Apache Ant. The build process is responsible for compiling, testing, and
+  deploying each module (sub-project) of MedRec.</p>
+
+<h2>Highlighted Features</h2>
+
+<p> In MedRec, each module is a Maven project and has its own <code>pom</code> file. </p>
+
+<h3><strong>Common Commands</strong></h3>
+
+<p>These are the most common default lifecycle phases executed:</p>
+<ul>
+  <li><b>validate</b>: validates that the project is correct and that all necessary information is available</li>
+  <li><b>compile</b>: compiles the source code of the project</li>
+  <li><b>test</b>: tests the compiled source code using a suitable unit testing framework. These tests should not
+    require that the code be packaged or deployed
+  </li>
+  <li><b>package</b>: takes the compiled code and packages it in its distributable format, such as a JAR file</li>
+  <li><b>install</b>: installs the package into the local repository for use as a dependency in other projects locally
+  </li>
+</ul>
+<p>There is an additional Maven lifecycle phase of note beyond the <i>default</i> list above:</p>
+<ul>
+  <li><b>clean</b>: cleans up artifacts created by prior builds</li>
+</ul>
+<h3><strong>WebLogic Development Maven Plug-in</strong></h3>
+
+<p>Apache Maven is a software tool for building and managing Java-based projects. WebLogic Server provides support for
+  Maven through the provisioning of plug-ins that enable you to perform various operations on WebLogic Server from
+  within a Maven environment.</p>
+
+<p>The <strong>weblogic-maven-plugin</strong> provides enhanced functionality to install, start and stop server
+  instances,
+  create domains, execute WLST scripts, and compile and deploy applications. With the
+  <code>weblogic-maven-plugin</code>, you can install WebLogic Server from within your Maven environment to fulfill
+  the local WebLogic Server requirement.</p>
+
+<p>For detailed information on installing and using the Weblogic Development Maven Plug-in to build applications and
+  projects, see <code><a target="_blank" href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/wlprg/maven.html">Developing Applications for Oracle
+    WebLogic Server</a></code>.</p>
+
+<p>If you didn't install MedRec by Quick Start Configuration Wizard(choosing full Weblogic installation), please update
+  Weblogic properties in <code>@MEDREC_HOME/modules/pom.xml</code></p>
+
+<h1>Usage</h1>
+
+<p>To build and deploy the entire MedRec application, complete the following steps:</p>
+<ol>
+  <li>Change to the <code>@MEDREC_HOME/module</code> directory, where
+    <code>MEDREC_HOME</code> represents the directory in which the MedRec is configured.
+    The default path is <code>Oracle_Home/wlserver/samples/server/medrec</code>.
+  </li>
+  <li>If you want a clean output directory, enter the following command:</li>
+    <pre class="code"> <code>mvn clean</code></pre>
+  <li>To rebuild the MedRec application, enter the following command:</li>
+    <pre class="code"> <code>mvn install</code></pre>
+  <li>To deploy the MedRec application on domain level, enter the following command:
+    <p>Deploy medrec.ear. Change to the <code>@MEDREC_HOME/modules/medrec/medrec-assembly</code> directory,</p>
+    <pre class="code"> <code>mvn com.oracle.weblogic:weblogic-maven-plugin:deploy</code></pre>
+
+    <p>Deploy physician.ear. Change to the <code>@MEDREC_HOME/modules/physician/physician-assembly</code> directory,</p>
+    <pre class="code"> <code>mvn com.oracle.weblogic:weblogic-maven-plugin:deploy</code></pre>
+
+    <p>Deploy chat.war. Change to the <code>@MEDREC_HOME/modules/chat</code> directory,</p>
+    <pre class="code"> <code>mvn com.oracle.weblogic:weblogic-maven-plugin:deploy</code></pre>
+    <p><b>Note</b>: due to different target types of each samples, deploy command only apply to Non-MT single server
+      MedRec</p>
+  </li>
+</ol>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="http://maven.apache.org">Apache Maven</a><br/>
+  </li>
+</ul>
+<h2>&nbsp; </h2>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

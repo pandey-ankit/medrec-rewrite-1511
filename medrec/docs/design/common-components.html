@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Common Components</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>Java EE provides a big picture for enterprise application development, but in many cases, developers may find some
+  limitations. For example:</p>
+<ul>
+  <li>Some Java EE APIs are flexible, but they do not provide enough abstraction and are too low-level for daily
+    use.
+  </li>
+  <li>Standard Java EE does not include easy-to-use functionality for certain scenarios, architectures, or patterns.
+  </li>
+</ul>
+<p>For this reason, MedRec is implemented using simple reusable components on top of Java EE APIs, covering common
+  technical features such as messaging, persistence, cache, integration testing, naming, and so on. These <code>common
+    components</code> significantly ease the application implementations that follow the architecture, described in
+  <a href="javascript:reloadTOC('design-overview.html')">Design Overview</a>, and also enforce the use of best
+  practices. </p>
+
+<h2>Overview</h2>
+
+<p>In general, most of the current <code>common components</code> are reusable CDI Beans that you can directly refer to
+  in your own CDI ManagedBeans, EJBs, JSF backing beans, and so on, using the standard dependency injection mechanism
+  of JavaEE. By default, all the transaction attributes of these EJB components are &quot;Supports&quot;, leaving the
+  transaction demarcation work to the clients. All the initial instance numbers of the EJBs are zero, so that MedRec
+  does not have to create unnecessary instances and enlist related resources if the components are not used. All the
+  maximum instance numbers of the EJBs are unlimited, which eliminates any potential thread contention in the EJBs.
+</p>
+
+<p>The following sections introduce the major components in various categories. </p>
+
+<p><strong>Note</strong>: The information provided about these components is fairly brief because you are not required
+  to understand the details and use of them in your own applications. See <a href="#add_resources">Additional
+    Resources</a> for links to additional documentation about the components. </p>
+
+<h2><a name="core"></a>Core </h2>
+
+<p>The core components include general purpose components that do not use a specific Java EE API such as JMS or
+  JPA. </p>
+
+<p>These core components include simple CDI interceptors for caching, validation and logging. You can declaratively
+  attach these interceptors to beans, making the features transparent to applications.
+  These interceptors generally employ the Delegate design pattern, which means they delegate the actual
+  implementations of the features to separate implementation provider components.
+  This makes it easy to change the implementation using its configuration, rather than programming. Additionally,
+  MedRec can get direct access to the implementation provider if it needs to programmatically use a feature. </p>
+<ul>
+  <li><strong>Transparent Method Invocation Cache</strong>: Transparently caches the return values of business methods
+    for Beans. A simple cache provider is provided by default, but a more sophisticated third-party cache provider
+    can be incorporated as required. There is also a CDI Event Observer in the Cache manager. Local Cache is to
+    refresh data when remote data of server has already been updated.
+  </li>
+  <li><strong>Transparent Method Parameter Validation</strong>: Automatically denies null method parameters for Beans.
+    It is used by application entry points to check the parameter supplied by outer applications.
+  </li>
+  <li><strong>Transparent Exception Logging</strong>: Automatically logs exception information and stack traces for
+    Beans. It is used by application entry points to record exceptions in the application logs before you
+    see the exceptions.
+  </li>
+</ul>
+
+<h2>Persistence </h2>
+
+<p>Persistence is a critical feature of Java EE; MedRec provides support for JPA and JDBC. In particular: </p>
+<ul>
+  <li><strong>JPQL Support</strong>: MedRec includes a static util classes of JPQL support which simplify the
+    implementation of services based on JPA named queries.
+  </li>
+  <li><strong>Criteria API Support</strong>: MedRec includes a static tool classes of Criteria API support which
+    simplify the implementation of services based on the JPA Criteria API. It provides a number of static public
+    helper methods that support various database operations and hide some of the complexity of the JPA APIs. Similar
+    to JPQL, the Criteria API is based on the abstract schema of persistent entities, their relationships, and
+    embedded objects. The Criteria API operates on this abstract schema to allow developers to find, modify, and
+    delete persistent entities by invoking Java Persistence API entity operations. Moreover, both Metamodel and
+    String are available as parameters of methods. The Metamodel API works in concert with the Criteria API to model
+    persistent entity classes for Criteria queries.
+  </li>
+</ul>
+
+<h2>Naming </h2>
+
+<p>Although dependency injection is widely supported in Java EE, there are still many circumstances in which MedRec
+  needs to get direct access to JNDI. For example, some technologies do not support DI, or a dynamic lookup is
+  required. For this reason, MedRec includes some naming clients that act as gateways to JNDI:</p>
+<ul>
+  <li><strong>Naming Client</strong>:
+    Follows the traditional service locator pattern and wraps JNDI operations.
+  </li>
+  <li><strong>Caching Naming Client Decorator</strong>: Follows the decorator design pattern and adds object cache
+    support to the <code>naming client</code>, using the <code>transparent method invocation cache </code>mentioned
+    in the <a href="#core">Core</a> section and CDI Decorator. This feature significantly improves the overall
+    lookup performance.
+  </li>
+</ul>
+
+<h2>Messaging </h2>
+
+<p>Although JMS is a flexible API, it can sometimes feel too low-level for daily use in common applications. For this
+  reason, MedRec uses gateways to hide the complexity of these APIs and add some advanced features for common cases,
+  while at the same time keeping the flexibility to work directly with low-level APIs. </p>
+
+<p>Currently, two major features are implemented:</p>
+<ul>
+  <li><strong> Message Client</strong>: Wraps the JMS APIs to implement various message exchange patterns (MEPs),
+    including asynchronous one-way, synchronous request-reply, asynchronous request-reply, and so on, hiding the JMS
+    APIs in most common cases<strong>.</strong> The feature includes a flexible automatic mapping between Java
+    objects and the payloads of different types of JMS messages. It keeps track of the remote JMS connections,
+    destinations, and so on, and transparently refreshes the stale remote references so that you do not have to
+    restart your applications if the remote messaging systems are temporarily unavailable.
+  </li>
+  <li><strong>Message Listener Support</strong>:
+        <span lang="EN-US" xml:lang="EN-US">A series of abstract base classes from which implementations of
+            <code>MessageListener</code> or MDB can directly inherit. </span>
+    The classes provide support for
+        <span lang="EN-US" xml:lang="EN-US"> different MEPs including one-way, request-reply, and so on,
+            without extra coding.</span>
+    Like the message client, these classes also perform automatic mapping between Java Objects and JMS message
+    playloads, and track remote JMS resources for transparent fault tolerance.
+  </li>
+</ul>
+
+<h2>Mail</h2>
+
+<p>MedRec uses a fairly simple <strong>Mail Client </strong> that serves as gateway to a mail system. </p>
+
+<h2>Testing</h2>
+
+<p>MedRec implements a set of integration tests that are important to programmers who adopt agile practices for features
+  such as EJBs. </p>
+
+<p> Currently, only <strong>Integration Testing Support for JPA Repository</strong> is supported; this testing support
+  significantly eases the testing of JPA <code>repositories</code> against actual databases but outside the EJB
+  container. An abstract base JUnit test case is provided; this test case is responsible for instantiating and
+  initializing the tested repositories, managing EntityManager and JDBC local transactions, and so on, to imitate the
+  similar functionality provided by the EJB container. Actual
+  test cases inherit from the base case and are not required to program the details themselves. </p>
+
+<p>By default, transactions are always rolled back after each test method execution so that there is no need to manually
+  clean up the database after the test. If, however, you want the changes in your test to be committed to the
+  database, or you want to verify something that only happens at a commit, then you can change the default behavior by
+  overriding the protected callback method.</p>
+
+<h2><a name="add_resources"></a>Additional Resources</h2>
+<ul>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/index.html">WebLogic Server Documentation</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/ejbpg/index.html">Developing Enterprise JavaBeans, Version 2.1, for Oracle WebLogic
+    Server</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/ejbad/index.html">Developing Enterprise JavaBeans for Oracle WebLogic Server</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/jmspg/index.html">Developing JMS Applications for Oracle WebLogic Server</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/wjndi/index.html">Developing JNDI Applications for Oracle WebLogic Server</a><br/>
+  </li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/wlprg/javamail.html">Programming JavaMail with WebLogic Server</a></li>
+</ul>
+<br/>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

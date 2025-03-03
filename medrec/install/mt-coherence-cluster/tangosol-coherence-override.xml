@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+
+<coherence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://xmlns.oracle.com/coherence/coherence-operational-config"
+           xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-operational-config coherence-operational-config.xsd"
+           xml-override="../common/tangosol-coherence-override.xml">
+
+  <cluster-config>
+  </cluster-config>
+
+   <management-config>
+      <reporter>
+         <autostart
+            system-property="tangosol.coherence.management.report.autostart">false
+         </autostart>
+      </reporter>
+   </management-config>
+
+</coherence>

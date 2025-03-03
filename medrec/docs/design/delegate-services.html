@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Delegate Services</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>A <code>Delegate service</code> is one of the special types of services described in <a
+    href="javascript:reloadTOC('design-overview.html')">Design Overview</a>. Delegate services have the same
+  business interfaces as normal services do and these interfaces are completely business-oriented. The difference is
+  that delegate services do not contain the actual implementations of the business functionality; rather, they use RMI
+  stubs, JMS clients, Web services stubs, and so on, to dispatch invocations to remote business functionality. </p>
+
+<p>The delegate services are also responsible for doing any required data model conversions, which means converting
+  local entities and value objects to the data structures of the transfer mechanism, and vice versa. Using this
+  approach, the remoting mechanisms are completely hidden from the clients. </p>
+
+<p>Compared to the traditional approach, in which we get direct access to the specific remoting mechanism in our
+  business components, the approach of delegate services provides the following benefits: </p>
+<ul>
+  <li>Programmers can freely change the remoting mechanisms or even switch to local service implementations without
+    worrying about breaking the clients. Also, if programmers want to replace local services with remote
+    functionality, they can simply have them become delegate services.
+  </li>
+  <li>If the contracts of the remote functionality (such as WSDL) change, programmers can simply change the delegate
+    service implementations if the changes are isolated.
+  </li>
+  <li>Programmers can use consistent object models throughout the client applications, and they don’t have to mix and
+    match local entities and value objects with tool-generated objects of Web services in the whole application.
+  </li>
+  <li>The service implementations that depend on remote functionality can be significantly simplified, and can
+    concentrate on their own local logic. Also, if programmers want run unit tests, they can easily mock up the
+    delegate services.
+  </li>
+</ul>
+<p>In MedRec, the delegate services are implemented as CDI beans, which call into JAX-WS dynamic to access remote Web
+  services or use JAX-RS clients through Uniform Resource Identifiers (URIs) to access remote REST resources. JAX-WS
+  is used to do basic SOAP invocations, while Representational State Transfer (REST) is an architectural style of
+  client-server application centered around the transfer of representations of resources through requests and
+  responses. In the REST architectural style, data and functionality are considered resources and are accessed using
+  URIs, typically links on the Web.</p>
+
+<p>The MedRec delegate services based on Web services simply reuse object models from the server-side application to
+  avoid creating another set of local domain models (including entities, value objects, service interfaces, etc); this
+  simplifies the implementations. It is important to note that this is <em>not</em> a best practice when designing
+  real-world applications. If you chose Web Services as the remoting mechanism, the server and client are normally
+  decoupled and WSDL is typically the only contract, which means that the client should have its own domain models.
+  Otherwise, if the client shares the same Java object models with the server, Web services might not be the best
+  choice, and you should consider using Java's native remoting mechanism like RMI, JAX-RS or some third-party solution
+  like Spring HTTP Invoker, which would be more efficient and powerful.</p>
+
+<p>Remote invocations are typically slower than local invocations; for this reason it is useful to cache the return
+  values of some remote invocations to avoid unnecessary network trips. MedRec includes very basic cache support for
+  the delegate services. MedRec declares the CDI interceptor of the transparent method invocation cache provided by
+  common components on some &quot;read&quot; operations of the delegate services, and the values returned to the
+  invokers will then be automatically cached. This is fairly typical usage of AOP to implement cross-cutting
+  functionality. MedRec also uses CDI Interceptors attached to the &quot;write&quot; operations to make particular
+  values in the cache become stale and automatically invalidate the stale ones. These interceptors are specific to
+  business use cases. However, it needs to fire an event to notice refreshing cache when remote data has been
+  updated</p>
+
+<p><strong>Note</strong>: The current cache support does not work in a clustered environment. </p>
+
+<p>MedRec uses a delegate service that in turn uses JMS to trigger the mail sending function asynchronously. JMS is
+  suitable for those scenarios in which interoperation, firewall, and so on are not important. The JMS-based delegate
+  services use the message client from common components, which means their implementation is simple. </p>
+
+<p>The transaction settings for the delegate services based on Web services, however, can be ignored because WebLogic
+  Web Services do not support distributed transaction and its integration with JTA.</p>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/wsovr/index.html">Understanding WebLogic Web Services for Oracle WebLogic Server</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/ejbpg/index.html">Developing Enterprise JavaBeans, Version 2.1, for Oracle WebLogic
+    Server</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/ejbad/index.html">Developing Enterprise JavaBeans for Oracle WebLogic Server</a></li>
+</ul>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

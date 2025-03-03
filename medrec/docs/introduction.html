@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Avitek Medical Records Sample</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../docs/core/index.html"></a>
+</head>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<body>
+<h2>What is MedRec?</h2>
+
+<p>
+  Avitek Medical Records (or MedRec) is a WebLogic Server sample application suite
+  that demonstrates all aspects of the Java Platform, Enterprise Edition (Java EE).
+  MedRec is designed as an educational tool for all levels of Java EE developers.
+  It showcases the use of each Java EE component, and illustrates best-practice design
+  patterns for component interaction and client development. MedRec also illustrates
+  best practices for developing and deploying applications with WebLogic Server on .
+</p>
+
+<h2>MedRec Application Overview</h2>
+
+
+<p>MedRec provides a framework for patients, doctors, and administrators to manage patient data. Patient data
+  includes:</p>
+<ul>
+  <li><strong>Patient profile information</strong>: A patient's name, address, social security number, and login
+    information.
+  </li>
+  <li><strong>Patient medical record</strong>: Details about a patient's visit with a physician, such as the patient's
+    vital signs and symptoms as well as the physician's diagnosis and prescriptions.
+  </li>
+</ul>
+<p>The MedRec suite consists of 3 main Java EE application modules, each packaged as an EAR or a WAR:</p>
+<ul>
+  <li><strong>MedRec EAR</strong>: Patients log in this application to edit their profiles information, or request
+    that their profiles are added to the system. Patients can also view prior medical records of visits with their
+    physician. Administrators use this application to approve or deny new patient profile requests. The
+    <code>medrec EAR</code> also provides all of the business logic used by the MedRec application suite, as well as
+    the Web Services used by different clients.
+  </li>
+  <li><strong>Physician EAR</strong>: Physicians and nurses log in this application to search and access patient
+    profiles, create and review patient medical records, and prescribe medicine to patients. The physician
+    application is designed to communicate using the Web Services provided in <code>medrec EAR</code>.
+  </li>
+  <li><strong>Chat WAR</strong>: Physicians and patients chat with each other. One online physician, one opened chat
+    room. There are two Websocket End Points, one for Patient, the other for Physician, and no web pages in this
+    WAR. The <code>medrec EAR</code> and <code>physician EAR</code> contain chat room client connecting Websocket
+    End Points with JavaScript.
+  </li>
+</ul>
+
+<h2>Multitenant MedRec Domains</h2>
+
+<p>
+  <strong>Note</strong>: WebLogic Server Multitenant domain partitions are deprecated in WebLogic Server 12.2.1.4.0 and
+  will be removed in the next release. Oracle recommends that customers using domain partitions as a container dedicated
+  to specific applications and resources consider the use of alternative container-based architectures, including the
+  deployment of WebLogic applications and services in Docker containers running in Kubernetes clusters.
+  <strong>Multitenant MedRec domains are deprecated in WebLogic Server 12.2.1.4.0 and will be removed in the next release.</strong>
+</p>
+
+<p>In addition to the default single server domain, MedRec provides multi-tenant SaaS samples that run on three partitions, either on a single server or on a Coherence cluster. WebLogic Server Multi-Tenancy (WLS MT) provides resource isolation within a domain partition, which is an administrative and runtime slice of a WebLogic domain that is dedicated to running application instances and related resources for a tenant. Domain partitions achieve greater density by allowing application instances and related resources to share the domain, WebLogic Server itself, the Java virtual machine, and the operating system while isolating tenant-specific application data, configuration, and runtime traffic.
+</p>
+<p>For more information, refer to the <a href="javascript:reloadTOC('mt/multi-tenancy-overview.html')">Multi-Tenancy Overview</a>.
+</p>
+
+<h2>MedRec Domain Categories</h2>
+<table border="1" cellspacing="1" cellpadding="5">
+  <tr>
+    <th width="200" valign="top" bgcolor="#EEEEEE"><b>Sample Category</b></th>
+    <th width="1000" valign="top" bgcolor="#EEEEEE"><b>description</b></th>
+  </tr>
+  <tr>
+    <td>Default Single Server</td>
+    <td>The default single server domain was installed if you chose the <b>Complete Installation</b> option when installing WebLogic Server, and then ran the Quick Start Configuration Wizard to install the WebLogic Server samples templates, then the MedRec domain has already been populated at <code>@MW_HOME/user_projects/domains/medrec</code>. For more information, see
+      <a href="javascript:reloadTOC('getting-started.html')">Getting Started</a>.
+      <br/>If you did not boot the default samples server using the Quick Start option, then refer to
+      <a href="javascript:reloadTOC('single-server/install.html')">
+        Install Non-MT Single Server MedRec</a>.
+    </td>
+  </tr>
+  <tr>
+    <td>Multi-Tenant Single Server</td>
+    <td>Multi-Tenant SaaS sample running three partitions on a single server. For more information, see
+      <a href="javascript:reloadTOC('mt-single-server/install.html')">
+        Install Multi-Tenancy Single Server MedRec</a>.
+    </td>
+  </tr>
+  <tr>
+    <td>Multi-Tenant Coherence Cluster</td>
+    <td>Multi-Tenant SaaS sample running three partitions on a Coherence cluster. For more information, see
+      <a href="javascript:reloadTOC('mt-coherence-cluster/install.html')">
+        Install Multi-Tenancy Coherence Cluster MedRec</a>.
+    </td>
+  </tr>
+</table>
+
+<h2>Project Directory </h2>
+
+<p>MedRec project files are installed into the <code><i>MEDREC_HOME</i></code> directory (<code><i>MEDREC_HOME</code></i> represents the directory in which the MedRec is configured).
+<p>The default path is <code>@MW_HOME/wlserver/samples/server/medrec</code>.
+  The project directory contains the following subdirectory structure:</p>
+<ul>
+  <li><code>\dist</code>: Deployable archives (JAR, WAR and EAR) generated by the modules of the MedRec application.
+  </li>
+  <li><code>\docs</code>: Documentation about the MedRec application suite.</li>
+  <li><code>\install</code>: Configures MedRec using WLST.</li>
+  <li><code>\lib</code>: Dependent libraries that may not be automatically available from WebLogic Server's general
+    CLASSPATH, set in the <code>@WL_HOME/server/bin/setWLSEnv</code> command.
+  </li>
+  <li><code>\modules</code>: Source files of the different modules
+    <ul>
+      <li><code>\common</code>: Common components used by the other modules</li>
+      <li><code>\medrec</code>: Aforementioned <strong>MedRec EAR</strong></li>
+      <li><code>\physician</code>: Aforementioned <strong>physician EAR</strong></li>
+      <li><code>\chat</code>: Aforementioned <strong>chat WAR</strong></li>
+      <li><code>\gar</code>: Coherence Cache GAR</li>
+      <li><code>\medrec-data-import</code>: Database initialization utility</li>
+      <li><code>\browser-starter</code>: Helper EAR that automatically brings up a browser window for users after
+        server starts up.
+      </li>
+    </ul>
+  </li>
+</ul>
+<h2>Additional Resources</h2>
+
+<p>Use these resources to learn more about the Avitek Medical Records sample application:</p>
+<ul>
+  <li><a href="http://www.oracle.com/technology/products/weblogic/index.html" target="_blank">WebLogic Server News and
+    Community</a><br>
+    You can post and read questions, comments, or suggestions about MedRec in these newsgroups.
+  </li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/index.html">WebLogic Server Documentation</a><br>
+    Complete documentation for developers and system administrators.
+  </li>
+</ul>
+<h2></h2>
+<hr>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+</body>
+</html>

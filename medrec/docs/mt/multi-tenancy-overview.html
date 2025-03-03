@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<style type="text/css">
+  .style1 {
+    font-family: "Courier New", Courier, mono
+  }
+</style>
+
+<head>
+  <title>Multi-Tenancy Overview</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>
+Multi-tenancy in WebLogic Server (WLS MT) provides a sharable infrastructure for use by multiple organizations. These organizations are a conceptual grouping of your own choosing, which you can think of as tenants. By allowing one domain to support multiple tenants, WLS MT improves density and achieves a more efficient use of resources while eliminating the hurdles typically present when trying to share multiple applications: runtime cross-application impact, security differences, data co-mingling, and administrative challenges.
+</p>
+<p>
+WLS MT provides resource isolation within a domain partition, an administrative and runtime slice of a WebLogic domain that is dedicated to running application instances and related resources for a tenant. Domain partitions achieve greater density by allowing application instances and related resources to share the domain, WebLogic Server itself, the Java virtual machine, and the operating system while isolating tenant-specific application data, configuration, and runtime traffic.
+</p>
+<p>
+Each domain partition has its own runtime copy of the applications and resources. Changes in class loading provide both application isolation and efficiency. Deploying to multi-tenant environments requires no changes to your applications. For example, you could run multiple instances of a payroll application in different domain partitions without modifying the application. For more information, see the <a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/WLSMT" target="_blank">Using WebLogic Server MT</a>.
+</p>
+
+<h2>Key Concepts in WLS MT</h2>
+<p>WLS MT is built upon the aforementioned domain partitions and these additional new concepts:</p>
+
+<ul>
+<li>
+<p><b>Tenants</b>&mdash;Tenants represent distinct user organizations, such as different external companies (for example, CompanyA and CompanyB), or different departments within a single company (for example, HR and Finance), that use applications and resources within a WebLogic domain.</p>
+<p>A tenant is a logical grouping of your own choosing; it is not a configurable object in Fusion Middleware Control or WLST. A tenant's identity is the association of a given user with a given tenant. For example, you might choose to associate the tenant Finance with a specific domain partition called <code><span>Finance-partition</span></code>.</p>
+        <p>The system derives which tenant a given user belongs to from the user's identity as prescribed by the user identity store. Further, the user's identity helps the system enforce what that user will be authorized to do as they move throughout the system, including but not limited to which tenant the user belongs.</p>
+</li>
+<li>
+<p><b>Resource Groups</b>&mdash;A named collection of (typically) related deployable resources, such as Java EE applications and the data sources, JMS artifacts, and other resources that the applications use.</p>
+<p>A traditional WebLogic Server domain may contain many types of deployable resources: Java EE applications, JMS servers and queues, data sources, and such. In this traditional model, if an application suite contains multiple Java EE applications and various resources that support those applications, the administrator defines these resources and deploys these applications individually rather than as a coherent unit.</p>
+<p>WLS MT introduces resource groups, simply as a convenient way to group together Java EE applications and the resources they use into a distinct administrative unit within the domain. The resources and applications are "fully qualified" in that the administrator provides all the information needed to start or connect to those resources, including credentials for connecting to a data source and targeting information for Java EE applications. A resource group will either contain these deployable resources directly or refer to a resource group template which contains the resources. Resource groups can be defined at the domain level, or be specific to a domain partition.</p>
+<p>All the resources in or referenced by a resource group are targeted together (to the same target). Resource groups can be started and stopped.</p>
+</li>
+<li>
+<p><b>Resource Group Templates</b>&mdash;A named, domain-level collection of deployable resources intended to be used as a pattern by (usually) multiple resource groups. Each resource group that refers to a given template will have its own runtime copies of the resources defined in the template. A resource group template is a convenient way to define and replicate resources for multiple tenants. Resource group templates make it very easy to deploy the same collection of applications and resources to multiple domain partitions.</p>
+<p>Resource group templates can define:</p>
+    <ul>
+        <li>
+            <p>Application Deployments</p>
+        </li>
+        <li>
+            <p>Library Deployments</p>
+        </li>
+        <li>
+            <p>JDBC System Resources</p>
+        </li>
+        <li>
+            <p>JMS System Resources</p>
+        </li>
+        <li>
+            <p>Coherence System Resources</p>
+        </li>
+        <li>
+            <p>File Stores</p>
+        </li>
+        <li>
+            <p>JMS Servers</p>
+        </li>
+        <li>
+            <p>Messaging Bridges</p>
+        </li>
+        <li>
+            <p>Path Services</p>
+        </li>
+        <li>
+            <p>Persistent Stores</p>
+        </li>
+        <li>
+            <p>SAF Agents</p>
+        </li>
+        <li>
+            <p>Foreign JNDI Providers</p>
+        </li>
+        <li>
+            <p>Mail Sessions</p>
+        </li>
+        <li>
+            <p>WLDF Modules</p>
+        </li>
+    </ul>
+<p>Resource group templates are defined at the domain level, and then referenced by one or more resource groups.</p>
+<p>Resource group templates are particularly useful in a SaaS environment where WLS MT activates the same applications and resources multiple times, once per domain partition. Some of the information about such resources is the same across all domain partitions, while some of it, such as the attributes of a JMS queue or of a DB connection, varies from one partition to the next. For example, the URL, username, and password used to connect to a data source would be different among different partitions. WLS MT will activate the application suite represented by the template differently for each partition. You can specify override configuration MBeans and resource deployment plans to override some attribute values in a partition.</p>
+</li>
+<li>
+<p><b>Virtual Targets</b>&mdash;Encapsulate where a partition or resource group runs and how to route traffic to them, including addresses, protocol settings, and targeting. Request routing is determined by the host name and optional URI.</p>
+<p>May include:</p>
+    <ul>
+        <li>
+            <p>Host name and port</p>
+        </li>
+        <li>
+            <p>Optional URI</p>
+        </li>
+        <li>
+            <p>Network Access Point/Channel</p>
+        </li>
+        <li>
+            <p>Protocol specific configuration</p>
+            <ul>
+                <li>
+                    <p>T3, IIOP</p>
+                </li>
+                <li>
+                    <p>Web Server</p>
+                </li>
+                <li>
+                    <p>SSL</p>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p>Target clusters and managed servers</p>
+        </li>
+        </ul>
+<p>Virtual targets isolate a domain partition and the global (domain-level) runtime from the physical attributes of the target WebLogic Server instances so that your application does not have to know these details.</p>
+</li>
+</ul>
+<h2>About Scope</h2>
+<p>When you deploy an application or library, you have four deployment scope options:</p>
+<ul>
+    <li>
+        <p><span class="bold">Global</span>. This is the equivalent of the domain level in a non-partitioned environment.</p>
+    </li>
+    <li>
+        <p><span class="bold">Resource group template</span>, which is always at the domain level. Whether the application or library you deploy to a resource group template is available at the domain level or a partition depends on the scope of the resource group that references the resource group template.</p>
+    </li>
+    <li>
+        <p><span class="bold">Resource group in a partition</span>. This is the only scope that is limited to a partition.</p>
+    </li>
+    <li>
+        <p><span class="bold">Resource group at the domain level</span>.</p>
+    </li>
+</ul>
+<p>You cannot share an application or library in a domain partition: the application or library is available only within the partition. When you deploy the application or library, you specify the resource group in the partition. In FMW Control, applications and libraries that are deployed to a resource group in a partition display the name of the domain partition and the resource group within that partition where they are deployed.</p>
+<p>The key difference between an application or class running at the domain level and an application or class running in the context of a partition is:</p>
+<ul>
+    <li>
+        <p>Applications or classes running at the domain level are available across the domain and are <span class="italic">not</span> available in partitions.</p>
+    </li>
+    <li>
+        <p>Applications or classes running in the context of a partition are available only within that partition.</p>
+    </li>
+</ul>
+
+<h2>About Resource Isolation</h2>
+
+<p>Resource isolation is critically important within a partitioned environment. When you create a resource group in a domain partition, WLS MT creates runtime copies of all of the resources needed by the application, including JMS servers, JMS stores and JMS modules (including connection factories, queues, topics, and such), JCA adapters, and other associated resources.</p>
+<p>When you deploy an application or library within a partition, any configuration changes you make are specific to that partition. WLS MT ensures that applications in one partition refer to the resources that apply to that partition only and not to resources associated with other partitions.</p>
+<p>Resource isolation in WLS MT encompasses:</p>
+<ul>
+    <li>
+        <p>Security&mdash;Unique security realm and identity domain for each domain partition.</p>
+    </li>
+    <li>
+        <p>Administration:</p>
+        <ul>
+            <li>
+                <p>Partition-specific administration</p>
+            </li>
+            <li>
+                <p>Independent deployment, configuration, and software updates</p>
+            </li>
+            <li>
+                <p>Partition-specific monitoring and troubleshooting</p>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <p>Runtime:</p>
+        <ul>
+            <li>
+                <p>Dedicated JNDI&mdash;WLS MT provides isolation between partitions at the JNDI level, which is partition-aware. Applications can bind named objects and retrieve them on a per-partition basis. Each resource is tagged (internally) with a partition-specific name, and is placed in a JNDI tree that is exclusive to the partition. Intra- and inter-application communication for a partition within a cluster is automatically isolated for the partition.</p>
+            </li>
+            <li>
+                <p>Isolated data&mdash;JMS, file system, and data sources</p>
+            </li>
+            <li>
+                <p>Resource isolation and fairness&mdash;Resource Consumption Managers (RCM) manage resources provided by the JVM or the OS. This allows system administrators to specify resource consumption management policies (including constraints, recourse actions and notifications) on resources such as CPU, heap, file, and network.</p>
+            </li>
+            <li>
+                <p>Partition Work Managers&mdash;Provide fairness of thread usage and prioritization of work requests among partitions that share the same WLS instance.</p>
+            </li>
+        </ul>
+    </li>
+    </ul>
+
+<h2>WLS MT Actors and Roles</h2>
+<p>Two main actors in WLS MT are WebLogic Server System Administrators and Partition Administrators.</p>
+<p>WebLogic Server System Administrators create and delete partitions for tenants. Only system administrators can set or change the security characteristics of a partition (such as the security realm, SSL configuration), or reference a shared (domain-level) resource group or resource group template.</p>
+<p>Partition Administrators manage partitions at the partition level, such as changing partition configuration, deploying applications, creating JMS resources, data sources, JDBC connections, and such, for each resource group in the partition.</p>
+<p>Both system and partition administrators:</p>
+<ul>
+    <li>
+        <p>Create, modify, and delete resource groups in partitions.</p>
+    </li>
+    <li>
+        <p>Deploy and undeploy applications to resource groups in partitions.</p>
+    </li>
+    <li>
+        <p>Start and stop partitions&mdash;All of the resource groups and all of the applications deployed to those resource groups are started or shut down.</p>
+    </li>
+    <li>
+        <p>Export and import partitions.</p>
+    </li>
+</ul>
+<p>Analogous to their WebLogic counterparts, partition-constrained roles exist for Deployers, Operators, and Monitors.</p>
+
+
+<h2>Understanding SaaS Multi-Tenancy</h2>
+
+<p>In a SaaS environment, if an application cannot internally provide a per-tenant view or the necessary per-tenant isolation, you might instead deploy separate instances of the application and its related server-side resources for each tenant. Each tenant might get its own stack that includes hardware capacity or Java virtual machines, WebLogic Server domains, administration servers, managed servers, clusters, and other related resources, such as web servers, data grids, networking, and storage. This is at the very least inefficient.</p>
+<p>The WLS MT SaaS model provides a way to get the most efficient use from server resources while still providing resource isolation. Each tenant gets an application instance plus resource instances on the targeted servers and clusters. The same application or applications run concurrently and independently on multiple domain partitions. No code changes to the applications are needed: WebLogic Server manages the domain partition identification and isolation.</p>
+<p>In the SaaS model, you typically define one or more applications and the resources they depend on in a resource group template. You then reference this template from every domain partition in which you want to use the same applications. You make any domain partition-specific changes by editing the values of the associated resource group.</p>
+<p>From a high-level view, the SaaS model procedural flow is:</p>
+<ol>
+    <li>
+        <p>The WebLogic Server System Administrator creates the JMS resources, data sources, and other resources for a resource group template.</p>
+    </li>
+    <li>
+        <p>The WebLogic Server System Administrator deploys the needed applications into the resource group template.</p>
+    </li>
+    <li>
+        <p>When ready to deploy for a tenant, the System Administrator does the following:</p>
+        <ol type="a" value="1">
+            <li>
+                <p>Creates a virtual target, if necessary.</p>
+            </li>
+            <li>
+                <p>Creates a domain partition configuration, including the resource group, pluggable database (PDB) info, the virtual target, the security realm, and targets the partition to a cluster or set of managed servers.</p>
+            </li>
+            <li>
+                <p>Optionally, overrides particular resource group and application deployment values.</p>
+            </li>
+            <li>
+                <p>Starts the domain partition, which starts all of the applications deployed to the resource group for that partition.</p>
+            </li>
+        </ol>
+    </li>
+    <li>
+        <p>After a domain partition is started, a Partition Administrator can view the runtime state of the partition applications and resources, view partition log entries, stop and restart the partition applications.</p>
+    </li>
+</ol>
+<p>At deployment, the applications and resources in the resource group template are replicated and deployed for each domain partition in a resource group, with the following results:</p>
+<ul>
+    <li>
+        <p>WebLogic infrastructure is shared among domain partitions.</p>
+    </li>
+    <li>
+        <p>Separate application instances have their own JNDI tree and resources.</p>
+    </li>
+    <li>
+        <p>Runtime traffic is isolated end-to-end. You accesses the application via the virtual target.</p>
+    </li>
+    <li>
+        <p>Partition Work Managers provide fairness of thread usage and prioritization of work requests among partitions.</p>
+    </li>
+    <li>
+        <p>Data is segregated with pluggable databases (PDBs). The data source implementation creates a separate physical connection pool for each domain partition to its assigned PDB.</p>
+    </li>
+</ul>
+
+<h2>Understanding PaaS Multi-Tenancy</h2>
+
+<p>The WLS MT PaaS model is synonymous with consolidation. Consolidation means that you can deploy different applications from many tenants into the same WebLogic infrastructure. WLS MT shares the infrastructure and underlying resources including the domain, clusters, managed servers, hardware, and network. In the SaaS use case, the WebLogic Server System Administrator typically manages all the domain partitions and their resource instances. However, in the PaaS use case, Partition Administrators are more likely to administer their respective domain partitions and the resources within them, including configuring resources and deploying applications.</p>
+<p>Consolidation:</p>
+<ul>
+    <li>
+        <p>Makes it easy to deploy applications from many tenants into the same WebLogic infrastructure.</p>
+    </li>
+    <li>
+        <p>Results in one domain to manage, one JVM consuming resources.</p>
+    </li>
+    <li>
+        <p>Isolates management. WebLogic Server System Administrators manage the infrastructure. Partition Administrators manage domain partition deployments and related resources.</p>
+    </li>
+    <li>
+        <p>Isolates the runtime, including domain partition-specific components: security realm (per tenant), virtual target (addresses), pluggable database, JNDI (internal traffic), JMS, Work Managers. Each tenant gets its own set of application instances and dedicated resources.</p>
+    </li>
+</ul>
+<p>In the PaaS use case, each tenant would typically run different applications, and these applications may or may not overlap with the applications run by other tenants. When implementing a WLS MT PaaS solution, you would typically create self-contained resource groups that do not refer to resource group templates but instead represent applications and their related resources that are to be available only within that domain partition. However, even though a PaaS solution is less likely to use resource group templates, this does not mean you cannot use resource group templates in a PaaS solution if they fit your use case.</p>
+<p>From a high-level view, the PaaS model procedural flow is:</p>
+<ol>
+    <li>
+        <p>The WebLogic Server System Administrator creates a virtual target, if necessary.</p>
+    </li>
+    <li>
+        <p>The WebLogic Server System Administrator creates a domain partition with a specified Partition Work Manager or quality of service (QoS) definition to manage the workload.</p>
+        <p>The Partition Work Manager defines the relative priority and underlying memory and CPU availability for the partition.</p>
+    </li>
+    <li>
+        <p>The WebLogic Server System Administrator selects a security realm for the domain partition, and sets the list of available targets.</p>
+        <p>Resources and applications in the domain partition are available only to users within the domain partition's security realm. Other tenants cannot see or access the resources or applications.</p>
+    </li>
+    <li>
+        <p>The WebLogic Server System Administrator assigns the domain partition to a Partition Administrator.</p>
+        <p>Resources and applications are managed by the Partition Administrator. (The underlying managed servers and clusters are not managed by a Partition Administrator.)</p>
+    </li>
+    <li>
+        <p>The Partition Administrator creates one or more resource groups for that domain partition and targets the resource group from the list of available targets.</p>
+    </li>
+    <li>
+        <p>The Partition Administrator creates different JMS resources, data sources, PDB info, application deployments, and such for each resource group in the domain partition.</p>
+    </li>
+    <li>
+        <p>The Partition Administrator starts the domain partition, which starts all of the applications deployed to the resource groups in the partition.</p>
+    </li>
+    <li>
+        <p>Repeat steps 1-4 for each additional tenant.</p>
+    </li>
+</ol>
+
+
+<br/>
+
+
+<br/><br/>
+<hr/>
+<p>
+  Copyright 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved.
+</p>
+
+</body>
+</html>

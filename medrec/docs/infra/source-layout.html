@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Source Layout and Build Process</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<h2>Module Hierarchy </h2>
+
+<p>The source code of the MedRec application is organized into a hierarchy of modules, under the <code>/modules</code>
+  directory, as mentioned in the <a href="javascript:reloadTOC('../introduction.html')">Introduction</a> chapter. The
+  hierarchy consists of two levels of sub-directories, dividing MedRec into various loosely-coupled sub-projects. </p>
+
+<p>The first level of sub-directories divides the MedRec application into several modules with different business
+  functionalities, such as the medrec EAR, physician EAR, common components, and so on.</p>
+
+<p>The second level of sub-directories again divides the aforementioned medrec and physician modules into sub-modules
+  that contain different technical building blocks following the layered architecture described in <a
+      href="javascript:reloadTOC('../design/design-overview.html')">Design Overview</a>. In general, these
+  sub-directories are as follows:</p>
+<ul>
+  <li><strong>/domain</strong>: Contains the <code>domain models</code>, packaged as an EJB JAR file.</li>
+  <li><strong>/facade</strong>: Contains the <code>facades</code>, packaged as an EJB JAR file.</li>
+  <li><strong>/xxx-facade-broker</strong>: Contains <code>facade brokers</code> of different types (such as JAX-WS and
+    JAX-RS), each packaged as a Web application (WAR) file. Web services are typically contained in their own
+    separate WAR.
+  </li>
+  <li><strong>/web</strong>: Contains <code>web user interfaces</code>, packaged as a WAR file.</li>
+  <li><strong>/assembly</strong>: Contains the EAR's deployment descriptors, libraries, etc, used to assemble the
+    preceding components into a complete EAR application.
+  </li>
+</ul>
+<h2>Project Layout</h2>
+
+<p>Each leaf module in the hierarchy tree described above is a separate sub-project, following the project layout
+  described by the Eclipse Web tools platform (WTP). </p>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="http://www.eclipse.org/webtools/" target="_blank">Eclipse Web Tools Platform </a><br/>
+  </li>
+</ul>
+<h2>&nbsp; </h2>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

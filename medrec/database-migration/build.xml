@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name="medrec-project-DB-migration" default="db.migrate" basedir=".">
+  <property file="../project.properties"/>
+  <property file="${basedir}/../install/non-mt-single-server/weblogic.properties"/>
+  <property file="${basedir}/properties/${db}.properties"/>
+  <property name="former-database" value="${database}"/>
+
+  <target name="db.migrate">
+    <ant target="data.import"/>
+    <ant target="datasource.update"/>
+  </target>
+
+  <target name="data.import" description="create data into specified database">
+
+    <!--test database connection-->
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <trycatch property="exception">
+      <try>
+        <sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.password}">
+          ${db.testSql};
+        </sql>
+        <echo message="Database connection tested successfully!"/>
+      </try>
+      <catch>
+        <!--test failed, build exit-->
+        <echo message="Database connection test failed, here are the database configurations, please check"/>
+        <echo message="url      = ${db.url}"/>
+        <echo message="driver   = ${db.driver}"/>
+        <echo message="user     = ${db.user}"/>
+        <echo message="password = ${db.password}"/>
+        <echo message="test sql = ${db.testSql}"/>
+        <fail message="Error: ${exception}"/>
+      </catch>
+    </trycatch>
+
+    <!--initiate database-->
+    <ant dir="../modules/medrec-data-import" inheritAll="false" target="data.importer.specific">
+      <property name="db.url" value="${db.url}"/>
+      <property name="db.driver" value="${db.driver}"/>
+      <property name="db.user" value="${db.user}"/>
+      <property name="db.password" value="${db.password}"/>
+    </ant>
+  </target>
+
+  <target name="datasource.update" description="update data source configured into medrec domain">
+    <!--modify MedRecGlobalDataSourceXA jdbc datasource-->
+    <java classname="weblogic.WLST" fork="true" failonerror="false" resultproperty="resultCode">
+      <arg line="script/configMedRecGlobalDataSourceXA.py
+            ${admin.server.username} ${admin.server.password} ${admin.server.host} ${admin.server.port}
+            ${db.url} ${db.XAdriver} ${db.user} ${db.password} '${db.testSql}'"/>
+    </java>
+    <!--exit build process when WLST command failed to connect to the server-->
+    <fail message="The weblogic server should be started up when running this command">
+      <condition>
+        <equals arg1="101" arg2="${resultCode}"/>
+      </condition>
+    </fail>
+    <!--exit build process when other errors happended in WLST script-->
+    <fail
+        message="Error happened when updating the datasource. Please check the above exception threw from WLST script.">
+      <condition>
+        <not>
+          <equals arg1="0" arg2="${resultCode}"/>
+        </not>
+      </condition>
+    </fail>
+
+    <!--update property in project.properties-->
+    <replace file="../project.properties" token="database=${former-database}" value="database=${db}"/>
+
+    <echo message="MedRec have been migrated from ${former-database} to ${db} successfully"/>
+    <echo message="***Note:Weblogic server should be restarted***"/>
+  </target>
+
+</project>

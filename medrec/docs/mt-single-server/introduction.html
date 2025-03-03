@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>MedRec Multi-Tenancy Domain</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>The WebLogic Server MT SaaS model provides a way to get the most efficient use from server resources while still providing resource isolation. In the MT SaaS model, you typically define one or more applications and the resources they depend on in a resource group template. You then reference this template from every domain partition in which you want to use the same applications. You make any domain partition-specific changes by editing the values of the associated resource group.
+</p>
+<img src="./domain.jpg" width="600" height="480"/>
+
+<br/>
+
+<h2>Tenants and Partition Relationship</h2>
+
+<p>
+  A tenant can have one or more partitions. In this sample, there are two MedRec tenants: Bayland Urgent Care and Valley Health. Bayland has one partition and Valley has two partitions.
+</p>
+<ul>
+  <li>Partition 1 - BayLand Urgent Care</li>
+  <li>Partition 2 - Valley Health, Valley-1</li>
+  <li>Partition 3 - Valley Health, Valley-2</li>
+</ul>
+<br/>
+
+<h2>MedRec Resource Group Template</h2>
+
+<p>
+  To support WLS Multi-Tenancy, the SaaS MedRec sample activates the same deployable applications and resources multiple times, once
+  for each MedRec partition that uses them.
+</p>
+
+<p>
+  There are three MedRec applications:
+</p>
+<ul>
+  <li>medrec.ear</li>
+  <li>physician.ear</li>
+  <li>chat.war</li>
+</ul>
+<p>
+  All resources, including JMS server and queue, data source, mail session, etc., are defined into a 
+  resource group template named <code>MedRecResourceTemplate</code> with MedRec applications.
+</p>
+
+<p>
+  Here is a snippet of the config.xml showing how resources are defined in the MedRecResourceTemplate:
+</p>
+<pre class="code">
+<code><i></i>&lt;resource-group-template&gt;</code>
+<code><i></i>  &lt;name&gt;MedRecResourceTemplate&lt;/name&gt;</code>
+<code><i></i>  &lt;app-deployment&gt;</code>
+<code><i></i>  &lt;name&gt;medrec&lt;/name&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>  &lt;/app-deployment&gt;</code>
+<code><i></i>  &lt;app-deployment&gt;</code>
+<code><i></i>  &lt;name&gt;physician&lt;/name&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>  &lt;/app-deployment&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>  &lt;jms-server&gt;</code>
+<code><i></i>  &lt;name&gt;MedRecJMSServer&lt;/name&gt;</code>
+<code><i></i>  &lt;/jms-server&gt;</code>
+<code><i></i>  &lt;jdbc-system-resource&gt;</code>
+<code><i></i>  &lt;name&gt;MedRecGlobalDataSourceXA&lt;/name&gt;</code>
+<code><i></i>  &lt;descriptor-file-name&gt;jdbc/MedRecGlobalDataSourceXA-9669-jdbc.xml&lt;/descriptor-file-name&gt;
+</code>
+<code><i></i> &lt;/jdbc-system-resource&gt;</code>
+<code><i></i> ...</code>
+<code><i></i>&lt;/resource-group-template&gt;</code>
+</pre>
+<br/>
+
+<h2>Virtual Target for Partitions</h2>
+
+<p>
+  The virtual targets <code>ValleyVT-1</code> and <code>ValleyVT-2</code> share one virtual host name but have different URI prefixes.
+</p>
+
+<p>
+  Here is a snippet of the config.xml showing showing separate URI prefixes for <code>ValleyVT-1</code> and <code>ValleyVT-2</code>:
+</p>
+<pre class="code">
+<code><i></i>&lt;virtual-target&gt;</code>
+<code><i></i>  &lt;name&gt;VT-bayLand&lt;/name&gt;</code>
+<code><i></i>  &lt;target&gt;MedRecServer&lt;/target&gt;</code>
+<code><i></i>  &lt;host-name&gt;www.baylandurgentcare.com&lt;/host-name&gt;</code>
+<code><i></i>  &lt;host-name&gt;localhost&lt;/host-name&gt;</code>
+<code><i></i>  &lt;uri-prefix&gt;/bayland&lt;/uri-prefix&gt;</code>
+<code><i></i>&lt;/virtual-target&gt;</code>
+<code><i></i>&lt;virtual-target&gt;</code>
+<code><i></i>  &lt;name&gt;VT-valley1&lt;/name&gt;</code>
+<code><i></i>  &lt;target&gt;MedRecServer&lt;/target&gt;</code>
+<code><i></i>  &lt;host-name&gt;www.valleyhealth.com&lt;/host-name&gt;</code>
+<code><i></i>  &lt;host-name&gt;localhost&lt;/host-name&gt;</code>
+<code><i></i>  &lt;uri-prefix&gt;/valley1&lt;/uri-prefix&gt;</code>
+<code><i></i>&lt;/virtual-target&gt;</code>
+<code><i></i>&lt;virtual-target&gt;</code>
+<code><i></i>  &lt;name&gt;VT-valley2&lt;/name&gt;</code>
+<code><i></i>  &lt;target&gt;MedRecServer&lt;/target&gt;</code>
+<code><i></i>  &lt;host-name&gt;www.valleyhealth.com&lt;/host-name&gt;</code>
+<code><i></i>  &lt;host-name&gt;localhost&lt;/host-name&gt;</code>
+<code><i></i>  &lt;uri-prefix&gt;/valley2&lt;/uri-prefix&gt;</code>
+<code><i></i>&lt;/virtual-target&gt;</code>
+</pre>
+<br/>
+
+<h2>Security Realm and Container Authentication</h2>
+
+<p>
+  The MT Single Server sample has three identity domains(IDD): admin IDD, bayland IDD for tenant Bayland, and valley IDD for tenant
+  Valley. However, the Weblogic system administrator ("weblogic") is only in the admin IDD.
+</p>
+<ul>
+  <li>Partition 1 is in BayLand Realm.</li>
+  <li>Partition 2 and Partition 3 are in Valley Realm.</li>
+</ul>
+<p>
+  MedRec web app's web.xml requires the role "admin" for the app admininstrator log in, and the weblogic.xml maps the "admin" role to
+  the "administrator" principal. So both bayland IDD and valley IDD have user "administrator".
+</p>
+
+<br/><br/>
+<hr/>
+<p>
+  Copyright 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved.
+</p>
+
+</body>
+</html>

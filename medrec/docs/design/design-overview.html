@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Design Overview</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+
+<p>The MedRec application closely follows the standard industry trends, extensively utilizing some of the recent
+  methodologies and technologies, in particular:</p>
+<ul>
+  <li>Java SE/EE</li>
+  <li>Domain-driven design (DDD)</li>
+  <li>Aspect-oriented programming (AOP)</li>
+  <li>Service-oriented architecture (SOA)</li>
+  <li>Agile software development</li>
+</ul>
+<p>In sum, MedRec presents a comprehensive Java EE architectural guideline for WebLogic Server programmers and
+  users.</p>
+
+<p>The following sections provide a brief overview of the MedRec application design based on the previous
+  considerations. For additional related technical resources, see <a href="#add_resources">Additional Resources</a>.
+</p>
+
+<h2>Design Highlights </h2>
+
+<p>The MedRec application features these major design building blocks: </p>
+<ul>
+  <li><strong>Common Components </strong>are technical components (such as EJB Components and CDI Beans) that are
+    highly reusable across different projects. They can significantly improve the productivity of Java EE and
+    enforce the use of best practices. Many MedRec application modules make extensive use of them.
+  </li>
+  <li><strong>Domain Models </strong>encapsulate the core business data and logic as well as their dependent
+    functionality in object-oriented styles, constituting the heart of a domain-centric application. The domain
+    models are classified into several types, most of which are EJB Components or CDI Beans:
+    <ul>
+      <li>
+        <strong>Entities and value objects</strong> are rich objects that encapsulate both state and behavior,
+        and represents business concepts, information of business situations, and business rules. The difference
+        between <code>entity</code> and <code>value object</code> is that the former has distinct identity while
+        the latter does not. Most of them are JPA mapped objects.
+      </li>
+
+      <li><strong>Gateways</strong> encapsulate the interactions with infrastructures (such as WebLogic Server),
+        hiding the complexity of calling into APIs such as JMS, JNDI, JavaMail, Batch and so on.
+      </li>
+      <li>
+        <strong>Delegate Services </strong>are mainly responsible for mapping remote business functionality as
+        local <code>services</code>, improving service composition in an SOA environment. They encapsulate the
+        remoting mechanisms and perform necessary data model conversions, which in turn hides the details of
+        distributed computing (such as remote interfaces and special data models) from clients.
+      </li>
+      <li><strong>Services </strong>define application workflow, directing <code>entities</code>, <code>value
+        objects</code>, <code>gateways</code>, and so on to work out problems. They are thin objects and do not
+        contain much business logic themselves. They are business-focused, and they rarely call into middleware
+        APIs directly.
+      </li>
+    </ul>
+  </li>
+  <li><strong>Facades</strong> are coarse-grained EJB components that act as wrappers for <code>services</code>.
+    Facades are mainly responsible for exposing the <code>services</code> to remote clients. In MedRec, some
+    additional <em>data transfer objects</em> are introduced to improve data transfer in a distributed environment.
+    Additionally, various <em>facade brokers</em> are introduced to attach different protocol bindings, such as
+    RMI/IIOP, JMS, JAX-WS, JAX-RS, and so on, to <code>facades</code>.
+  </li>
+  <li><strong>Web User Interfaces</strong> are responsible for interacting with the end users who use Web browsers as
+    their clients. They are implemented as JSF Web applications, or as RESTful resources, or as Server Endpoints of
+    Websocket, or as SSE handler and delegate the actual business processing to the <code>services</code> located
+    in the same WebLogic Server instance.
+  </li>
+  <li><strong>Developer Tests</strong> are developed by the application developers instead of QA engineers, and are
+    considered vitally important in agile software development. Both unit tests and integration tests are added to
+    test all the aforementioned building blocks.
+  </li>
+  <li><strong>Build Process</strong> is responsible for managing the entire lifecycle of the project. This includes
+    building, automated testing, reporting, deployment, distribution, and so on. The build process is based on Ant
+    and Maven to simplify various things in a multi-module project.
+  </li>
+</ul>
+<p>These featured build blocks are the foundation of the major MedRec application modules and the essentials of a Java
+  EE server-side application. </p>
+
+<h2>Layered Architecture</h2>
+
+<p>In the MedRec application, the previous building blocks are organized in an architecture that consists of several
+  clearly-defined layers: </p>
+<ul>
+  <li><strong>Infrastructure Layer</strong> consists of infrastructure applications as application servers, database
+    servers, and so on.
+  </li>
+  <li><strong>Domain Layer</strong> consists of <code>domain models</code>.</li>
+  <li><strong>Facade Layer </strong>consists of <code>facades</code>.</li>
+  <li><strong>Presentation Layer</strong> consists of <code>web user interfaces</code>.</li>
+  <li><strong>Client Layer </strong>consists of Web browsers and application clients. Application clients could be
+    desktop GUI applications, external server-side applications, and so on.
+  </li>
+</ul>
+<p>The following diagram shows the basic architecture of the MedRec application.</p>
+
+<p><img src="architecture1.jpg" width="500" height="400"/></p>
+
+<p> The <code>domain layer</code> is the central piece of the server-side application. The <code>facade layer</code> and
+  <code>presentation layer</code> are constructed around the <code>domain layer</code> to expose its functionality to
+  different types of clients. <strong> </strong>The <code>facade layer</code> interacts with remote <code>application
+    clients</code> (maybe also including some AJAX clients inside browser), while the <code>presentation
+    layer</code> interacts with <code>browsers</code>. Unlike other architectures, the <code>presentation
+    layer</code> here never calls into the <code>facade layer</code>, so these two layers are in a parallel
+  relationship. </p>
+
+<p>One could consider the <code>infrastructure layer</code> and <code>client layer</code> to be outside the boundary of
+  a server-side application. Generally, only the upper layer depends on the lower layer within the same application
+  (module), but not vice versa. </p>
+
+<p><code>Common components</code>, <code>developer tests</code> and <code>build process</code> are typically involved in
+  all the layers. </p>
+
+<h2>Implementation Technologies</h2>
+
+<p>The MedRec application uses Java EE (including Oracle add-on features) and Java SE technologies extensively. In
+  addition, some third-party technologies are also introduced to implement the functionality that is not well covered
+  by the standard Java platform as well as WebLogic Server. </p>
+
+<p>The following graphic provides a summary on how the MedRec application uses the various technologies in its overall
+  architecture. </p>
+
+<p><img src="architecture2.jpg" width="500" height="400"/></p>
+
+<p>Both the <code>domain layer</code> and <code>facade layer</code> make use of JAX-WS, JAX-RS, JMS, and so on, but the
+  difference is that the <code>facade layer</code> mainly uses them to <em>expose</em> remote services, while the
+  domain layer mainly uses them to <em>access</em> remote services. </p>
+
+<p>The MedRec application does not use many third-party libraries, even though there are some excellent open source
+  libraries available that would be very helpful. This is because the main focus of MedRec is to show how to program
+  using Java EE on WebLogic Server. </p>
+
+<h2><a name="add_resources"></a>Additional Resources</h2>
+<ul>
+  <li><a href="http://www.oracle.com/technology/products/weblogic/index.html" target="_blank">WebLogic Server News and
+    Community</a><br/>
+    You can post and read questions, comments, or suggestions about MedRec in these newsgroups.
+  </li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/index.html">WebLogic Server Documentation</a><br/>
+    Complete documentation for developers and system administrators.
+  </li>
+  <li><a href="http://www.osoa.org/">Open Service-Oriented Architecture</a></li>
+  <li><a href="http://www.aosd.net/">Aspect-Oriented Software Development </a></li>
+  <li><a href="http://domaindrivendesign.org/">Domain-Driven Design </a></li>
+  <li><a href="http://martinfowler.com/books.html#eaa">Patterns of Enterprise Application Architecture</a></li>
+</ul>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+</body>
+</html>

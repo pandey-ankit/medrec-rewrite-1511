@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Services</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p><code>Services</code> are the final types in the domain model discussed in this section. Services serve as a sort of
+  commander in the domain layer: they are responsible for maintaining the relationships of the various domain models,
+  assembling them into a whole, and directing them to implement business functionality. </p>
+
+<p>The services themselves mainly focus on business rather than actual technology. Their exposed interface methods
+  usually map to business use cases or individual steps of the use cases; the set of methods of a service together
+  make up a collection of use cases that are closely related to each other. Although the services can themselves
+  contain business logic that does not necessarily belong to the instances of the entities or value objects, the
+  services directly delegate most of the other logic to the instances. In other words, services should not contain all
+  of the application logic, like the session beans in traditional Java EE do, because that typically leads to a
+  procedure-oriented design, which can be fragile for complex applications. The services rarely touch the Java EE or
+  similar technical APIs directly; rather, they delegate middleware operations to gateways, and delegate remoting to
+  delegate services. Using this complex delegation model, applications achieve the desired separation of
+  responsibility. </p>
+
+<p><strong>NOTE:</strong> Although MedRec itself is not that complex of an application, it still follows these basic
+  best practices. </p>
+
+<p>The services are the major entry points of the domain layer, which means that almost all of the invocations to the
+  domain layer should first go through a service. Services themselves do not directly handle remote invocations; those
+  invocations should first go through the facades. The services completely hide persistences and gateways from the
+  clients (e.g. facades and web user interfaces), but expose entities and value objects. The delegate services are a
+  bit different, because they also expose business functionality as the normal services do. From the clients'
+  perspectives, the delegate services are exactly the same as the services, so that they can also be directly exposed
+  to clients. Put another way, the services and delegate services are in a parallel relationship.</p>
+
+<p>The transaction attributes of the services are also different from the other types of the domain models. This is
+  because services are the best places to demarcate transaction for the entire application. As already described,
+  services are the major entry points to the domain layers, and their clients include facades, web user interfaces,
+  etc. MedRec demarcates transactions on the services so as to use the EJB container-managed transaction and make the
+  domain layer a full-fledged building block. In general, the service methods that get access, including indirect
+  access, to transactional resources such as databases, message queue, etc, must be marked as &quot;Required&quot;, so
+  as to ensure that JTA transactions are always started. There are, however, exceptions to this rule. For example,
+  service methods that execute JPA queries that return large collections of objects are marked &quot;NotSupported&quot;
+  so as to optimize the performance and increase the scalability of database access. Service methods that do nothing
+  with transactional resources are marked &quot;Supports&quot; to avoid unnecessary transaction overhead. It is also
+  possible to mark them &quot;NotSupported&quot; if you want to strictly prohibit transactional support and you do not
+  care about the overhead of possibly suspending a transaction. </p>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/ejbpg/index.html">Developing Enterprise JavaBeans, Version 2.1, for Oracle WebLogic
+    Server</a></li>
+  <li><a href="https://docs.oracle.com/en/middleware/fusion-middleware/weblogic-server/12.2.1.4/ejbad/index.html">Developing Enterprise JavaBeans for Oracle WebLogic Server</a><br/>
+  </li>
+</ul>
+<p>&nbsp; </p>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

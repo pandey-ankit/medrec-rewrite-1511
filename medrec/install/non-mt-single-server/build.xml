@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ @author Copyright (c) 2007, @COPYRIGHT_CURRENTYEAR, Oracle and/or its affiliates. All rights reserved.
+ -->
+<project name="non-mt-single-server" default="install" basedir=".">
+  <property environment="env"/>
+  <property file="${basedir}/weblogic.properties"/>
+  
+  <typedef resource="weblogic/ant/taskdefs/antlib.xml"/>
+  
+  <property name="domain.name"  value="medrec"/>
+  <property name="domain.dir"   value="${wls.domain.dir}/${domain.name}"/>
+  
+  <property name="derby.sys.home" value="${domain.dir}/common/db"/>
+  
+  <target name="install">
+    <antcall target="createDomain"/>
+    <antcall target="createTemplate"/>
+    <antcall target="derby.stop"/>
+    <antcall target="derby.start"/>
+    <antcall target="startAdminServer"/>
+  </target>
+  
+  <target name="createDomain">
+    <ant dir="${basedir}/../common" inheritAll="true" target="createDomain">
+      <property name="domain.name" value="${domain.name}"/>
+      <property name="domain.dir"  value="${domain.dir}"/>
+    </ant>
+  </target>
+  
+  <target name="createTemplate">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="medrecTemplate.py
+      ${medrec.template} ${domain.dir}"/>
+    </java>
+  </target>
+  
+  <target name="startAdminServer">
+    <ant dir="${basedir}/../common" inheritAll="true" target="startAdminServer">
+      <property name="domain.name" value="${domain.name}"/>
+      <property name="domain.dir"  value="${domain.dir}"/>
+    </ant>
+  </target>
+  
+  <target name="stopAdminServer">
+    <ant dir="${basedir}/../common" inheritAll="true" target="stopAdminServer">
+      <property name="domain.name" value="${domain.name}"/>
+      <property name="domain.dir"  value="${domain.dir}"/>
+    </ant>
+  </target>
+  
+  
+  <target name="derby.start">
+    <ant dir="${basedir}/../common" inheritAll="true" target="derby.start">
+      <property name="derby.sys.home" value="${derby.sys.home}"/>
+    </ant>
+  </target>
+  
+  <target name="derby.stop">
+    <ant dir="${basedir}/../common" inheritAll="true" target="derby.stop">
+      <property name="derby.sys.home" value="${derby.sys.home}"/>
+    </ant>
+  </target>
+  
+  <target name="start">
+    <antcall target="derby.start"/>
+    <antcall target="startAdminServer"/>
+  </target>
+  
+  <target name="stop">
+    <antcall target="stopAdminServer"/>
+    <antcall target="derby.stop"/>
+  </target>
+  
+</project>

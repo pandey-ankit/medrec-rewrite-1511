@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Work Manager</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>Relative Thread Resource Usage Per Partition</h1>
+
+<p>
+  System administrators can configure QoS of thread resource usage of each partition configured in a WebLogic
+  domain. The features discussed here apply to threads that are managed by the WebLogic Server Work Manager, which
+  provides configuration to limit the number of work manager threads in each partition, as well as thread usage
+  allocation based on thread usage time for each partition.
+</p>
+
+<p>
+  The MT single server sample shows how to use the Work Manager to balance the thread resources of three MedRec partitions. The Bayland partition is set to a VIP tenant, which is illustrated in this sample snippet of the <code>@MW_HOME/user_projects/domains/medrec-mt-single-server/config/config.xml</code> file:
+</p>
+<pre class="code">
+<code><i></i>&lt;partition-work-manager&gt;</code>
+<code><i></i>  &lt;name&gt;vip&lt;/name&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>&lt;/partition-work-manager&gt;</code>
+<code><i></i>&lt;partition&gt;</code>
+<code><i></i>  &lt;name&gt;bayland&lt;/name&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>  &lt;partition-work-manager&gt;vip&lt;/partition-work-manager&gt;</code>
+<code><i></i>&lt;/partition&gt;</code>
+<code><i></i></code>
+<code><i></i>&lt;partition-work-manager&gt;</code>
+<code><i></i>  &lt;name&gt;common&lt;/name&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>&lt;/partition-work-manager&gt;</code>
+<code><i></i>&lt;partition&gt;</code>
+<code><i></i>  &lt;name&gt;valley1&lt;/name&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>  &lt;partition-work-manager&gt;common&lt;/partition-work-manager&gt;</code>
+<code><i></i>&lt;/partition&gt;</code>
+</pre>
+
+<h3>Partition Work Request Prioritization</h3>
+
+<p>
+  The system administrator is required to specify a fair share value for each partition configured in a WebLogic domain.
+  The fair share value is a desired percentage of thread usage of that partition compared to the thread usage of all
+  partitions. The value must be a number between 1 and 99. It is recommended that the sum of this value for all
+  partitions running in a WebLogic domain to be added up to 100, but it is not strictly enforced. In cases when they do not
+  add up to 100, WebLogic Server would assign thread-usage times to different partitions based on their relative values. The system
+  administrator should be allowed to further adjust the fair share values among partitions in a running WebLogic domain.
+</p>
+
+<h3>Partition Shared Capacity for Work Managers</h3>
+
+<p>
+  The system administrator can optionally impose a partition shared capacity for Work Managers limit for a partition
+  configured to run on a WebLogic domain to limit the number of work requests from a partition. This limit includes work
+  requests that are either running or queued waiting for an available thread. When the limit is exceeded, WebLogic Server would
+  start rejecting certain requests submitted from the partition. The value is expressed as a percentage of the capacity
+  of the entire server instance as configured in the "Shared Capacity For Work Managers" feature that throttles the number of
+  requests in the entire server instance. The partition shared capacity for Work Managers must be a value between 1%
+  and 100%.
+</p>
+
+<h3>Partition Minimum Threads Constraint Limit</h3>
+
+<p>
+  The system administrator can optionally provide a limit on the minimum threads constraint value for each partition
+  configured in the WebLogic domain. If configured, this would impose an upper limit on the minimum threads constraint values
+  configured in a partition. If the sum of the configured values of all minimum threads constraints in a partition
+  exceeds this configured value, a warning message will be logged and WebLogic Server would internally reduce the number of threads
+  the thread pool would allocate for the constraints.
+</p>
+
+<h3>Partition Maximum Threads Constraint</h3>
+
+<p>
+  The system administrator can optionally impose a limit of the maximum number of threads in the self-tuning thread pool
+  that are concurrently working on requests from a partition. This can be useful to prevent a partition from using more
+  than its fair share of thread resources, especially in abnormal situations, such as when threads are blocked on I/O
+  waiting for responses from a remote server that is not responding. Setting a maximum threads constraint in such a 
+  scenario would help ensure that some threads would be available for processing requests from other partitions in the
+  WebLogic Server instance.
+</p>
+<p>
+  Here is a snippet of the config.xml showing how Work Manager can be configured to balance the thread resources in a partition:
+</p>
+<pre class="code">
+<code><i></i>&lt;partition-work-manager&gt;</code>
+<code><i></i>  &lt;name&gt;vip&lt;/name&gt;</code>
+<code><i></i>  &lt;shared-capacity-percent&gt;60&lt;/shared-capacity-percent&gt;</code>
+<code><i></i>  &lt;fair-share&gt;50&lt;/fair-share&gt;</code>
+<code><i></i>  &lt;min-threads-constraint-cap&gt;100&lt;/min-threads-constraint-cap&gt;</code>
+<code><i></i>  &lt;max-threads-constraint&gt;150&lt;/max-threads-constraint&gt;</code>
+<code><i></i>&lt;/partition-work-manager&gt;</code>
+</pre>
+
+<br/><br/>
+<hr/>
+<p>
+  Copyright 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved.
+</p>
+
+</body>
+</html>

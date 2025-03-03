@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Install Multi-Tenancy Single Server MedRec</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<br/>
+
+<p>Use these intructions to build and run the Multi-tenant (MT) MedRec domain. This domain is an MT SaaS model that hosts three tenants on a single server.</p>
+
+<h2>Preparing the Sample</h2>
+<ol>
+  <li>Set the samples environment:</li>
+  <p>Change to the <code>@MW_HOME/wlserver/samples/server</code> directory and 
+    run the <code>setExamplesEnv</code> script.</p>
+
+  <li>Optionally, customize the Administration Server properties for the MT MedRec server:</li>
+  <p>Change to the <code>@MEDREC_HOME/install/mt-single-server</code> directory. Open the
+    <a href="../../install/mt-single-server/weblogic.properties" target="_blank">weblogic.properties</a> file and update these properties:</p>
+<pre>
+  <code>admin.server.name</code>
+  <code>admin.server.host</code>
+  <code>admin.server.port</code>
+  <code>admin.server.username</code>
+  <code>admin.server.password</code>
+</pre>
+  <p>
+    <b>Note:</b> Make sure that the <code>admin.server.port</code> isn't already occupied for MT MedRec domain. Default choose 7005 as the MT MedRec domain port.
+  </p>
+  </li>
+  <li>Optionally, add virtual host mappings in your OS hosts file</li>
+  <p>
+  Open the <code>/etc/hosts</code> file and add the following lines:</p>
+<pre>
+  <code>127.0.0.1 www.baylandurgentcare.com</code>
+  <code>127.0.0.1 www.valleyhealth.com</code>
+</pre>
+  <p>On Windows, the OS hosts file is in <code>C:\Windows\System32\drivers\etc</code>.</p>
+  <p><b>Note:</b> You can access MedRec using <code>localhost</code> without configuring your hosts file.</p>
+</ol>
+
+<br/>
+
+<h2>Building and Installing the Sample</h2>
+
+<p>
+  From the <code>@MEDREC_HOME</code> directory, run:
+</p>
+<pre>
+  <code>ant mt.single.server.sample</code>
+</pre>
+<br/>
+
+<h2>Running the Sample</h2>
+<p>When the installation completes, the MT MedRec domain is located at <code>@MW_HOME/user_projects/domains/medrec-mt-single-server</code>.
+  The script also starts the MT Medrec server, so you don't need to go to the domain directory and restart the server.
+
+<p>You can directly access MedRec via following URLs according to the server port <code>admin.server.port</code> you set. Click
+  following URL links in the table to experience the MT MedRec applications in the same manner as the default singel server MedRec.</p>
+  <p>Assuming you used the default setting of <code>admin.server.port=7005</code>, the MT MedRec URLs are:</p>
+
+<table border="1" cellspacing="1" cellpadding="5">
+  <tr>
+    <th width="450" valign="top" bgcolor="#EEEEEE"><b>&nbsp;URL</b></th>
+    <th width="240" valign="top" bgcolor="#EEEEEE"><b>&nbsp;Patition</b></th>
+  </tr>
+  <tr>
+    <td>&nbsp;<a href="http://www.baylandurgentcare.com:7005/bayland/medrec" data-toggle="tooltip"
+                 target="_blank">http://www.baylandurgentcare.com:7005/bayland/medrec</a></td>
+    <td>&nbsp;BayLandUrgentCare</td>
+  </tr>
+  <tr>
+    <td>&nbsp;<a href="http://localhost:7005/bayland/medrec" data-toggle="tooltip"
+                 target="_blank">http://localhost:7005/bayland/medrec</a></td>
+    <td>&nbsp;BayLandUrgentCare</td>
+  </tr>
+  <tr>
+    <td>&nbsp;<a href="http://www.valleyhealth.com:7005/valley1/medrec" data-toggle="tooltip"
+                 target="_blank">http://www.valleyhealth.com:7005/valley1/medrec</a></td>
+    <td>&nbsp;ValleyHealth-1</td>
+  </tr>
+  <tr>
+    <td>&nbsp;<a href="http://localhost:7005/valley1/medrec" data-toggle="tooltip"
+                 target="_blank">http://localhost:7005/valley1/medrec</a></td>
+    <td>&nbsp;ValleyHealth-1</td>
+  </tr>
+  <tr>
+    <td>&nbsp;<a href="http://www.valleyhealth.com:7005/valley2/medrec" data-toggle="tooltip"
+                 target="_blank">http://www.valleyhealth.com:7005/valley2/medrec</a></td>
+    <td>&nbsp;ValleyHealth-2</td>
+  </tr>
+  <tr>
+    <td>&nbsp;<a href="http://localhost:7005/valley2/medrec" data-toggle="tooltip"
+                 target="_blank">http://localhost:7005/valley2/medrec</a></td>
+    <td>&nbsp;ValleyHealth-2</td>
+  </tr>
+</table>
+<p>
+  <b>Note:</b> You may need to change the proxy of your browser network settings to "No proxy" or add bypass proxy settings
+  for these hosts.
+</p>
+<br>
+
+<h2>Adding an Extra MedRec Tenant</h2>
+
+<p>
+  Change to the <code>@MEDREC_HOME/install/mt-single-server</code> directory, and run:
+</p>
+<pre>
+  <code>ant newTenant -Dtenant.name=XXXX</code>
+</pre>
+<p>
+  According to the <code>tenant.name</code> you set, the script will create a new partition with a new virtual target and realm.
+  You can then access MedRec by using this URL: <code>http://localhost:7005/XXXX/medrec</code>
+</p>
+<br/>
+<h2>Control Commands List</h2>
+<p>
+  From the <code>@MEDREC_HOME/install/mt-single-server</code> directory, review the details of the
+  <a href="../../install/mt-single-server/build.xml" target="_blank">build.xml</a> file.
+</p>
+<ol>
+  <li>Start the Adminstration Server:</li>
+<pre>
+  <code>ant startAdminServer</code>
+</pre>
+  <li>Shut down the Adminstration Server:</li>
+<pre>
+  <code>ant stopAdminServer</code>
+</pre>
+  <li>Start Derby listening to the Adminstration Server:</li>
+<pre>
+  <code>ant derby.start</code>
+</pre>
+  <li>Stop Derby listening to the Adminstration Server:</li>
+<pre>
+  <code>ant derby.stop</code>
+</pre>
+  <li>Initiate all the "start" commands listed above:</li>
+<pre>
+  <code>ant start</code>
+</pre>
+  <li>Initiate all the "stop" commands listed above:</li>
+<pre>
+  <code>ant stop</code>
+</pre>
+</ol>
+
+<br/><br/>
+<hr/>
+<p>
+  Copyright 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved.
+</p>
+</body>
+</html>

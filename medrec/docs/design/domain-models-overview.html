@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Overview of Domain Models</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>The domain model is the heart of the MedRec application. The application uses object-oriented domain models and
+  follows the domain-driven design, even though MedRec has very simple business logic.</p>
+
+<p>As described in <a href="javascript:reloadTOC('design-overview.html')">Design Overview</a>, the domain models consist
+  of a number of types of objects, and each of them has clearly-defined responsibilities. EJB technologies, especially
+  Stateless Session Bean and JPA, are used extensively. The diagram below illustrates the construction of the domain
+  layer as well as some typical invocation flows. You can also think of these lines as dependency relationships. </p>
+
+<p><img src="domain-layer.jpg" width="700" height="208"/></p>
+
+<p>&nbsp; </p>
+<p>The <code>entities</code> and <code>value objects</code> sit in the center of the <code>domain layer</code>, serving
+  as the heart of the whole application. <code>Services</code>, <code>gateways</code> and <code>delegate
+    services</code> are the adapters to various external resources that the application depends on.
+  <code>Services</code> coordinate all of these to expose business functionality to either <code>web user
+    interfaces</code> or <code>facades</code>. </p>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

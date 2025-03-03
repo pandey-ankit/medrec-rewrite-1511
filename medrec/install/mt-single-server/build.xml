@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ @author Copyright (c) 2014, @COPYRIGHT_CURRENTYEAR, Oracle and/or its affiliates. All rights reserved.
+ -->
+<project name="mt-single-server" default="install" basedir=".">
+  <property environment="env"/>
+  <property file="${basedir}/weblogic.properties"/>
+  
+  <typedef resource="weblogic/ant/taskdefs/antlib.xml"/>
+  
+  <property name="domain.name"  value="medrec_mt_single_server"/>
+  <property name="domain.dir"   value="${wls.domain.dir}/${domain.name}"/>
+  
+  <property name="derby.sys.home" value="${domain.dir}/common/db"/>
+  
+  <target name="install">
+    <antcall target="createDomain"/>
+    <antcall target="startAdminServer"/>
+    <antcall target="createDerbySchema"/>
+    <antcall target="configureResources"/>
+    <antcall target="deployApp"/>
+    <antcall target="configureTenant-bayland"/>
+    <antcall target="configureTenant-valley"/>
+    <antcall target="configureWorkManager"/>
+    <antcall target="configureRCM"/>
+    <antcall target="updateValleyAppearance"/>
+  </target>
+  
+  <target name="createDomain">
+    <ant dir="${basedir}/../common" inheritAll="true" target="createDomain">
+    </ant>
+  </target>
+  
+  <target name="startAdminServer">
+    <ant dir="${basedir}/../common" inheritAll="true" target="startAdminServer">
+    </ant>
+  </target>
+  
+  <target name="stopAdminServer">
+    <ant dir="${basedir}/../common" inheritAll="true" target="stopAdminServer">
+    </ant>
+  </target>
+  
+  <target name="configureResources">
+    <ant dir="${basedir}/../common" inheritAll="true" target="configureAppRGT">
+      <property name="dbDriver" value="${derby.xa.client}"/>
+      <property name="rgtName"  value="MedRecRGT"/>
+    </ant>
+  </target>
+  
+  <target name="deployApp">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="appDeploy.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}"/>
+    </java>
+  </target>
+  
+  <target name="configureTenant-bayland">
+    <ant dir="../../modules/medrec-data-import" inheritAll="false" target="data.importer.specific">
+      <property name="db.url" value="jdbc:derby://localhost:1527/mt-single-server-bayland;DatabaseName=mt-single-server-bayland;create=true"/>
+      <property name="db.driver" value="${derby.client}"/>
+      <property name="db.user" value="bayland"/>
+      <property name="db.password" value="bayland"/>
+    </ant>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="newMTTenant.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}
+      bayland jdbc:derby://localhost:1527/mt-single-server-bayland;DatabaseName=mt-single-server-bayland bayland bayland baylandRealm www.baylandurgentcare.com"/>
+    </java>
+    <ant dir="${basedir}/../common" inheritAll="true" target="addUserToRealm">
+      <property name="realmName"  value="baylandRealm"/>
+    </ant>
+    <ant dir="${basedir}/../common" inheritAll="true" target="startPartition">
+      <property name="partition.name"  value="bayland"/>
+    </ant>
+  </target>
+  
+  <target name="configureTenant-valley">
+    <!-- valley1 -->
+    <ant dir="../../modules/medrec-data-import" inheritAll="false" target="data.importer.specific">
+      <property name="db.url" value="jdbc:derby://localhost:1527/mt-single-server-valley1;DatabaseName=mt-single-server-valley1;create=true"/>
+      <property name="db.driver" value="${derby.client}"/>
+      <property name="db.user" value="valley1"/>
+      <property name="db.password" value="valley1"/>
+    </ant>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="newMTTenant.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}
+      valley1 jdbc:derby://localhost:1527/mt-single-server-valley1;DatabaseName=mt-single-server-valley1 valley1 valley1 valleyRealm www.valleyhealth.com"/>
+    </java>
+    <ant dir="${basedir}/../common" inheritAll="true" target="startPartition">
+      <property name="partition.name"  value="valley1"/>
+    </ant>
+    <!-- valley2 -->
+    <ant dir="../../modules/medrec-data-import" inheritAll="false" target="data.importer.specific">
+      <property name="db.url" value="jdbc:derby://localhost:1527/mt-single-server-valley2;DatabaseName=mt-single-server-valley2;create=true"/>
+      <property name="db.driver" value="${derby.client}"/>
+      <property name="db.user" value="valley2"/>
+      <property name="db.password" value="valley2"/>
+    </ant>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="newMTTenant.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}
+      valley2 jdbc:derby://localhost:1527/mt-single-server-valley2;DatabaseName=mt-single-server-valley2 valley2 valley2 valleyRealm www.valleyhealth.com"/>
+    </java>
+    <ant dir="${basedir}/../common" inheritAll="true" target="addUserToRealm">
+      <property name="realmName"  value="valleyRealm"/>
+    </ant>
+    <ant dir="${basedir}/../common" inheritAll="true" target="startPartition">
+      <property name="partition.name"  value="valley2"/>
+    </ant>
+  </target>
+  
+  <target name="configureWorkManager">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="workManager.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password}"/>
+    </java>
+  </target>
+  
+  <target name="configureRCM">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="rcm.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}"/>
+    </java>
+  </target>
+  
+  <target name="newTenant">
+    <echo message="Tenant name: ${tenant.name}"/>
+    <ant dir="../../modules/medrec-data-import" inheritAll="false" target="data.importer.specific">
+      <property name="db.url" value="jdbc:derby://localhost:1527/mt-single-server-${tenant.name};DatabaseName=mt-single-server-${tenant.name};create=true"/>
+      <property name="db.driver" value="${derby.client}"/>
+      <property name="db.user" value="${tenant.name}"/>
+      <property name="db.password" value="${tenant.name}"/>
+    </ant>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="newMTTenant.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}
+      ${tenant.name} jdbc:derby://localhost:1527/mt-single-server-${tenant.name};DatabaseName=mt-single-server-${tenant.name} ${tenant.name} ${tenant.name}
+      ${tenant.name}Realm www.${tenant.name}.com"/>
+    </java>
+    <ant dir="${basedir}/../common" inheritAll="true" target="addUserToRealm">
+      <property name="realmName"  value="${tenant.name}Realm"/>
+    </ant>
+    <ant dir="${basedir}/../common" inheritAll="true" target="startPartition">
+      <property name="partition.name"  value="${tenant.name}"/>
+    </ant>
+  </target>
+
+  <target name="derby.start">
+    <ant dir="${basedir}/../common" inheritAll="true" target="derby.start">
+    </ant>
+  </target>
+
+  <target name="derby.stop">
+    <ant dir="${basedir}/../common" inheritAll="true" target="derby.stop">
+    </ant>
+  </target>
+  
+  <target name="createDerbySchema">
+    <antcall target="derby.stop"/>
+    <antcall target="derby.start"/>
+  </target>
+
+  <target name="start">
+    <antcall target="derby.start"/>
+    <antcall target="startAdminServer"/>
+  </target>
+  
+  <target name="stop">
+    <antcall target="stopAdminServer"/>
+    <antcall target="derby.stop"/>
+  </target>
+  
+  <target name="updateValleyAppearance">
+    <ant dir="${basedir}/../common" inheritAll="true" target="updateAppearance">
+      <property name="partition"  value="valley1"/>
+    </ant>
+    <ant dir="${basedir}/../common" inheritAll="true" target="updateAppearance">
+      <property name="partition"  value="valley2"/>
+    </ant>
+  </target>
+  
+</project>

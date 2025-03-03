@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Resource Consumption Management</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>
+  WLS MT aims to achieve improved density and enhance utilization of a customer's computing infrastructure by allowing multiple tenants (users) to share a single WebLogic domain. It is critical to determine, manage, isolate, and monitor access to resources in the WebLogic runtime to ensure fairness in allocation, prevent contention/interference of access to shared resources, and to provide consistent performance for multiple co-resident tenants.
+</p>
+
+<p>
+  The framework builds on the resource management support provided by JDK 8u40, to allow WebLogic system administrators
+  to specify resource consumption management policies (specify constraints, recourse actions and notifications) on
+  JDK-managed resources such as CPU, heap, files, and network. This project also delivers a lightweight, standards-based,
+  comprehensive and extensible resource consumption management (RCM) framework that could then be used by containers and
+  components in WebLogic Server for managing the consumption of their shared resources.
+</p>
+
+<p>
+<ul>
+  <li>Typically, a system administrator has either no mechanisms or limited mechanisms to partition the access to shared JDK resources (such as, CPU, Heap, File and Network), monitor their access, and enforce comprehensive policies on the consumption of these resources by consumers. In a MT environment, a system administrator would want to ensure that a consumer does not over-consume resources and thereby starve another consumer's access to that shared resource.
+  </li>
+  <li>In a MT application server, a system administrator may want to provide tiered/ differentiated service levels (for example, VIP vs. common levels of service) to customers. However, no mechanism exists to discriminate access or enforce these differentiated service access policies to resources.
+  </li>
+  <li>A system administrator may want to configure business-specific policies (for example, apply a different policy for
+    a particular partition based on time-of-day to accommodate specific workloads that would run in that partition) and
+    have them enforced at the point of consumption of the resource.
+  </li>
+</ul>
+</p>
+<p>
+  In SaaS Medrec sample, BaylandUrgentCare is a premium VIP partition. In contrast, the ValleyHealths are common partitions. This sample explicitly specifies the quota and constraints of file access, CPU, memory heap, threads, etc.
+</p>
+
+<h2>Resource Manager</h2>
+
+<p>
+  A system administrator would be able to specify RCM policies (also referred to as policies in this document) around
+  RM-enabled resources on a per-resource-consumer basis. For a resource, the system administrator would be able to:
+</p>
+
+<ul>
+  <li>
+  Specify one or more triggers (such as, maximum usage of the resource is limited to 400 units).
+  </li>
+  <li>
+  Specify an action that must be performed when that trigger reaches the specified value. 
+  </li>
+</ul>
+
+<p>
+These actions may result in an activity that happens in the same thread where the resource consumption request was made (synchronous), or may be performed in a different thread from where the resource consumption request was made (asynchronous).
+</p>
+
+<p>
+  The trigger/action combination helps a system administrator shape, control, and limit the usage of a resource by a resource-consumer.
+</p>
+
+<p>
+  This sample snippet of the <code>@MW_HOME/user_projects/domains/medrec-mt-single-server/config/config.xml</code> file
+  illustrates two levels of tenants (<code>vip</code> and <code>cm</code>) that each have different CPU utilization triggers.
+</p>
+
+<h3>VIP Tenant</h3>
+
+<p>
+  This config.xml snippet shows a VIP tenant with high-level usage of resources:
+</p>
+<pre class="code">
+<code><i></i>&lt;resource-manager&gt;</code>
+<code><i></i>  &lt;name&gt;vip&lt;/name&gt;</code>
+<code><i></i>  &lt;cpu-utilization&gt;</code>
+<code><i></i>    &lt;name&gt;vip-cpu&lt;/name&gt;</code>
+<code><i></i>    &lt;trigger&gt;</code>
+<code><i></i>      &lt;name&gt;vip-cpu-slow&lt;/name&gt;</code>
+<code><i></i>      &lt;value&gt;70&lt;/value&gt;</code>
+<code><i></i>      &lt;action&gt;slow&lt;/action&gt;</code>
+<code><i></i>    &lt;/trigger&gt;</code>
+<code><i></i>    &lt;trigger&gt;</code>
+<code><i></i>      &lt;name&gt;vip-cpu-shutdown&lt;/name&gt;</code>
+<code><i></i>      &lt;value&gt;90&lt;/value&gt;</code>
+<code><i></i>      &lt;action&gt;shutdown&lt;/action&gt;</code>
+<code><i></i>    &lt;/trigger&gt;</code>
+<code><i></i>  &lt;/cpu-utilization&gt;</code>
+<code><i></i>&lt;/resource-manager&gt;</code>
+<code><i></i></code>
+<code><i></i>&lt;partition&gt;</code>
+<code><i></i>  &lt;name&gt;bayland&lt;/name&gt;</code>
+<code><i></i>  &lt;resource-manager-ref&gt;vip&lt;/resource-manager-ref&gt;</code>
+<code><i></i>&lt;/partition&gt;</code>
+</pre>
+
+<h3>Common Tenant</h3>
+
+<p>
+  This config.xml snippet shows a common tenant with low usage of file-open occurences:
+</p>
+<pre class="code">
+<code><i></i>&lt;resource-manager&gt;</code>
+<code><i></i>  &lt;name&gt;common&lt;/name&gt;</code>
+<code><i></i>  &lt;cpu-utilization&gt;</code>
+<code><i></i>    &lt;name&gt;cm-cpu&lt;/name&gt;</code>
+<code><i></i>    &lt;trigger&gt;</code>
+<code><i></i>      &lt;name&gt;cm-cpu-slow&lt;/name&gt;</code>
+<code><i></i>      &lt;value&gt;30&lt;/value&gt;</code>
+<code><i></i>      &lt;action&gt;slow&lt;/action&gt;</code>
+<code><i></i>    &lt;/trigger&gt;</code>
+<code><i></i>    &lt;trigger&gt;</code>
+<code><i></i>      &lt;name&gt;cm-cpu-shutdown&lt;/name&gt;</code>
+<code><i></i>      &lt;value&gt;50&lt;/value&gt;</code>
+<code><i></i>      &lt;action&gt;shutdown&lt;/action&gt;</code>
+<code><i></i>    &lt;/trigger&gt;</code>
+<code><i></i>  &lt;/cpu-utilization&gt;</code>
+<code><i></i>&lt;/resource-manager&gt;</code>
+<code><i></i></code>
+<code><i></i>&lt;partition&gt;</code>
+<code><i></i>  &lt;name&gt;ValleyHealth1&lt;/name&gt;</code>
+<code><i></i>  &lt;resource-manager-ref&gt;common&lt;/resource-manager-ref&gt;</code>
+<code><i></i>&lt;/partition&gt;</code>
+<code><i></i>&lt;partition&gt;</code>
+<code><i></i>  &lt;name&gt;ValleyHealth2&lt;/name&gt;</code>
+<code><i></i>  &lt;resource-manager-ref&gt;common&lt;/resource-manager-ref&gt;</code>
+<code><i></i>&lt;/partition&gt;</code>
+</pre>
+
+<br/><br/>
+<hr/>
+<p>
+  Copyright 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved.
+</p>
+
+</body>
+</html>

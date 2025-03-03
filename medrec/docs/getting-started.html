@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Getting Started with MedRec</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>
+  While installing WebLogic Server, if you chose the "Complete with Samples" option to install the Examples domain, and then used the Quick Start Configuration Wizard option to automatically install the samples templates, then the default MedRec domain (non-MT single server) has already been populated at <code>@MW_HOME/user_projects/domains/medrec</code>.
+</p>
+<p>The following sections will help you get started using and learning about MedRec:</p>
+<ul>
+  <li><a href="#starting">Starting and Using MedRec</a></li>
+  <li><a href="#admin">Invoking and Using the MedRec Administration Console</a></li>
+  <li><a href="#building">Building the MedRec Application Suite</a></li>
+  <li><a href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+<h1><a name="starting" id="starting"></a>Starting and Using MedRec</h1>
+
+<p>When running the WebLogic Server installation program, select the Complete Installation option to install the
+  Examples domain, which allows you to run the Avitek Medical Records application suite.</p> 
+<p>To begin using the MedRec application, complete these steps:</p>
+<ol>
+  <li>Change to the <code>@MW_HOME/user_projects/domains/medrec</code> directory.
+    <p><b>On Windows:</b></p>
+    <p>Enter the following command:</p>
+    <pre class="code"> <code>startWebLogic.cmd</code></pre>
+    <p><b>Or on UNIX Bourne shell:</b></p>
+    <p>Enter the following command:</p>
+    <pre class="code"> <code>sh ./startWebLogic.sh</code></pre>
+  </li>
+  <li>After the server boots, a browser window opens and loads the main Avitek Medical Records index page,
+    <code>http://hostname:port/medrec/start.xhtml</code>.
+    Read this page to learn about the basic user roles supported in MedRec.
+  </li>
+  <li>To begin using the MedRec application, use a link on the index page or point a new browser window to
+    <code>http://hostname:port/medrec/index.xhtml</code>.
+    The Main MedRec application page provides log-in links for the three MedRec user types: Patients, Physicians, and
+    Administrators.
+  </li>
+  <p><strong>Note:</strong> You can register new patients in the system by using the Register link on the start page.
+    Physicians, Administrators and a some Patients are pre-defined, and you can login as a certain role by using the
+    passwords listed at <code>http://hostname:port/medrec/index.xhtml</code> and
+    <code>http://hostname:port/medrec/physician/login.xhtml</code>.
+  </p>
+  <li>To try out the basic features of MedRec, perform the following tasks:
+    <ol type="a" value="1">
+      <li>Register a new patient using the Register link on <code>http://hostname:port/medrec/index.xhtml</code>.</li>
+      <li>Log in as an Administrator and approve the new registration request.</li>
+      <li>Log in as a Physician and create new Medical Records for the patient.</li>
+      <li>Log in as a new patient and view the newly created medical records.</li>
+    </ol>
+  </li>
+</ol>
+
+<h1><a name="admin" id="admin"></a>Invoking and Using the MedRec Administration Console</h1>
+
+<p>To invoke the MedRec Administration Console:
+<ol>
+ <li>Enter the following URL in your browser: <code> http://hostname:port/console</code>.</p>
+  <p>where <code><i>hostname</i></code> refers to the computer on which MedRec is running.</p> 
+  <p>If your browser is on the same computer as MedRec, you can enter <code>http://localhost:7001/console</code>. 
+  </li>
+  <li>Enter your username and password.
+  <p>The administrator username and password are the ones you entered when creating the WebLogic Server samples domain.</p>
+  </li>
+  <li>Then click <b>Log In</b>.
+  </li>
+</ol>
+<h1><a name="building" id="building"></a>Building the MedRec Application Suite</h1>
+
+<p>Oracle provides the complete source code for the MedRec application. You can examine the source code to understand
+  how individual features are implemented. You can also use the source code to understand how to organize and build
+  Java EE applications using Ant and Maven. </p>
+
+<h3>Set Your Environment</h3>
+<ol>  
+ <li>Open a command window.
+ <li>Set your environment by running either one of these scripts:
+  <ul>
+   <li><code>@MW_HOME/user_projects/domains/medrec/bin/setDomainEnv</code>
+   <li><code>@MW_HOME/wlserver/samples/server/setExamplesENV</code>
+  </ul>
+</ol>
+<p>You can now use Ant or Maven to rebuild MedRec from source and deploy it to the running MedRec Server.
+
+<h3>Ant</h3>
+<ol>
+  <li>Change to the <code>@MEDREC_HOME</code> directory.</li>
+  <li>Enter the following command:<br/><br/>
+    <pre><code> ant</code></pre>
+  </li>
+  <li>To disable running automated tests in the build process, use the <code>-Dnotest=true</code>
+    flag:<br/><br/>
+    <pre><code> ant -Dnotest=true</code></pre>
+  </li>
+</ol>
+
+<h3>Maven</h3>
+<ol>
+  <li>Change to the <code>@MEDREC_HOME/modules</code> directory.
+  </li>
+  <li>If you want a clean output directory, enter the following command:<br/><br/>
+    <pre><code> mvn clean</code></pre>
+  </li>
+  <li>To rebuild the MedRec application, enter the following command:<br/><br/>
+    <pre><code> mvn install</code></pre>
+  </li>
+</ol>
+
+<p>For more information about the build mechanism and project layout, refer to the specific chapters. </p>
+
+<h1><a name="troubleshooting" id="troubleshooting"></a>Troubleshooting</h1>
+<ul>
+  <li>
+    The server starts with the error
+    <code>java.net.BindException - Address already in use.</code>
+
+    <p>
+      This error means that the configured WebLogic Server port is being used
+      by another process such as another WebLogic Server instance. To fix this, either
+      reconfigure the port to a unique port or terminate the running process that
+      is bound to the configured port.
+    </p>
+  </li>
+  <li>You receive a <code>Page cannot be displayed</code> or an
+    <code>Error 404 - Not found</code> error when attempting to
+    access the server with a browser.
+    <p>
+      This can happen if your browser is set up to access
+      all URLs through a proxy server.
+      If the machine running WebLogic Server is not registered
+      with the proxy server, you will receive
+      a URL failure from your browser. To fix this, you can
+      configure your browser to not use the
+      proxy server, or not use the proxy server to access
+      an address that begins with the name of the
+      machine running WebLogic Server.
+    </p>
+  </li>
+</ul>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

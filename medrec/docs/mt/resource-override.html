@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Resource Overriding</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>
+  The multi-tenancy features of WebLogic Server (WLS MT) permit domain-level collections of deployable resources to be defined in resource group templates, which make it easy to deploy the same collection of applications and resources to multiple domain partitions.
+</p>  
+<p>  
+  Resource group templates are particularly useful in a multi-tenant SaaS environment where WLS MT activates the same applications and resources multiple times, once per domain partition. Some of the information about such resources is the same across all domain partitions, while some of it, such as the attributes of a JMS queue or of a DB connection, varies from one partition to the next, and so may not be correct for all - or even any - of the individual partitions that refer to the template.
+</p>
+<br/>
+
+<h2>Data Source</h2>
+
+<p>
+  The database URL, username, and password used to connect to a data source would be different among different partitions. So for each partition of the MT MedRec samples, you will need to modify the partition-specific configuration to override the shared data source configuration.
+</p>
+<p>
+  The default Derby database used by MedRec has multiple schemas so you can try out the SaaS features of WLS MT without having to install another database. For example, in the MT Single Server MedRec sample, there are three Derby schemas: bayland, valley1, and valley2.
+</p>
+
+<p>
+  Here is a config.xml snippet of the data source override for the BayLandUrgentCare partition:
+</p>
+<pre class="code">
+<code><i></i>&lt;partition&gt;</code>
+<code><i></i>  &lt;name&gt;BayLandUrgentCare&lt;/name&gt;</code>
+<code><i></i>  &lt;...&gt;</code>
+<code><i></i>  &lt;jdbc-system-resource-override&gt;</code>
+<code><i></i>  &lt;name&gt;BaylandDS&lt;/name&gt;</code>
+<code><i></i>  &lt;data-source-name&gt;MedRecGlobalDataSourceXA&lt;/data-source-name&gt;</code>
+<code><i></i>  &lt;url&gt;jdbc:derby://localhost:1527/bayland;databaseName=bayland&lt;/url&gt;</code>
+<code><i></i>  &lt;user&gt;bayland&lt;/user&gt;</code>
+<code><i></i>  &lt;password&gt;{AES}ntkzWue63mqT9WW6F7Cv2cYbjL/4K7QKpZCFmeq+/rI=&lt;/password&gt;</code>
+<code><i></i>  &lt;/jdbc-system-resource-override&gt;</code>
+<code><i></i>  ...</code>
+<code><i></i>&lt;/partition&gt;</code>
+</pre>
+<p>
+  <b>Note:</b> You should not use Derby in a production environment. For more information, refer to the Oracle 12<i>c</i> database 
+    documentation.
+</p>
+<br/>
+<h2>Deployment Plan</h2>
+<p>
+  In a SaaS scenario, applications are deployed to a Resource Group Template in advance. However, for certain requirements, you may want to create some differences between partitions or tenants. For example, there are two tenants in MedRec: Bayland and Valley. Leveraging the JSF contract feature, we could distinguish the appearance of Bayland and Valley by using different photos and background colors.
+</p>
+<p>
+  Looking at the XHTML files in the medrec-web module, note that each one includes the JSF contract attribute.
+</p>
+<pre class="code">
+<code>&lt;f:view contracts="#{initParam['contract.name']}"&gt;</code>
+</pre>
+<p>
+  This snippet shows how the <code>contract.name</code> parameter is defined in the web.xml of medrec-web module.
+</p>
+<pre class="code">
+<code><i></i>&lt;context-param&gt;</code>
+<code><i></i>  &lt;param-name&gt;contract.name&lt;/param-name&gt;</code>
+<code><i></i>  &lt;param-value&gt;bayland&lt;/param-value&gt;</code>
+<code><i></i>&lt;/context-param&gt;</code>
+</pre>
+<p>
+  There are two JSF contracts in the medrec-web module, which are identified by their tenant names: <code>bayland</code> and <code>valley</code>. Each contract has a suite of Facelet templates and photos. The default contract is <code>bayland</code>, as shown in the web.xml snippet. Using the deployment plan, you can switch the contract in the partition-scoped runtime. For more information, see the <a href="../../install/deploy_plan.xml" target="_blank">deploy_plan.xml</a>.
+</p>
+<p>
+  Both the MT Single Server and MT Coherence Cluster samples are using WLST to update the appearance of the Valley tenant. For more information, see <a href="../../install/common/updateAppearance.py" target="_blank">updateAppearance.py</a>. This can also be accomplished using Oracle Fusion Middleware Control.
+</p>
+
+<br/><br/>
+<hr/>
+<p>
+  Copyright 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved.
+</p>
+
+</body>
+</html>

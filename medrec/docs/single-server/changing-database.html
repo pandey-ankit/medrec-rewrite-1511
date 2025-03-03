@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Change the Current Database</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <link href="../../../docs/css/example.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p>Derby is the default database that is used by the MedRec application. If you prefer, you can change to an Oracle
+  database or another database, such as MySQL. Derby and Oracle databases are explicitly supported by default. If you
+  decide to use other databases, ensure that you have placed the JDBC driver in the <code>CLASSPATH</code> correctly.
+</p>
+
+<p>To change the database, follow these steps:</p>
+<ol>
+  <li>Start the MedRec server and ensure that the target database is available.
+    <ol>
+      <li>If the database supports different users having different tablespaces, like an Oracle database, one
+        database instance is enough.
+      </li>
+      <li>Otherwise, prepare two database instances, one for development and the other one for unit tests. The aim
+        of this is to avoid data conflicts.
+      </li>
+    </ol>
+  </li>
+  <li>Provide JDBC connection information. There are two prepared properties files under
+    <code>@MEDREC_HOME/database-migration/properties</code>:
+    <code>derby.properties</code> and <code>oracle.properties</code>.
+    <ol>
+      <li>Change the connection information according to your environment.</li>
+      <li>If you prefer to use another database, for example MySQL, you must provide a file named
+        <code>mysql.properties</code> under this directory. For convenience, you can use
+        <code>derby.properties</code> as a template and rename it. <br/>
+        <strong>Note</strong>: You should provide all the values according to the keys in the property file.
+      </li>
+    </ol>
+  </li>
+  <li>Open a command window and set your environment by running the <code>@SAMPLES_HOME/setExamplesEnv</code>
+    script, where <code>SAMPLES_HOME</code> represents the main WebLogic Server Examples
+    root directory, which by default is configured in <code>Oracle_Home/wlserver/samples/server</code>.
+  </li>
+  <li>Change to the <code>@MEDREC_HOME</code> directory.</li>
+
+  <li>Enter the following command:<br/><br/>
+    <pre class="code"> <code>ant –Ddb=xxx db.migrate</code></pre>
+    <strong>Note</strong>: The db argument (<code>xxx</code>) specifies the database you want to use and its value
+    should be the same as the name of the properties file without the &quot;<code>.properties</code>&quot; suffix.
+    For example, run <code>ant –Ddb=mysql db.migrate</code> if you want to change the database to MySQL and have
+    provided a <code>mysql.properties</code> file.<br/>
+    This command initiates the database by creating tables and inserting data, modifying the JDBC configuration for
+    unit tests, and changing the existing data source <code>MedRecGlobalDataSourceXA</code>.
+  </li>
+  <li>Restart the server.</li>
+</ol>
+<p>After completing these steps, the MedRec application will now be running on the database you prefer. This operation
+  is reversible. You can re-run the ant command with the appropriate argument for your previous database to return to
+  running the MedRec application on your previous database.</p>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

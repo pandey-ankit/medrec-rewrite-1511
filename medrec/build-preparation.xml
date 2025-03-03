@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    @author Copyright (c) 2007,2013, Oracle and/or its affiliates. All rights reserved.
+-->
+<project name="build-preparation">
+
+  <dirname property="project.home" file="${ant.file.build-preparation}"/>
+
+  <property name="module.home" value="${project.home}/modules"/>
+
+  <property environment="env"/>
+
+  <property file="${project.home}/project.properties"/>
+  
+  <property file="${project.home}/install/non-mt-single-server/weblogic.properties"/>
+
+  <target name="banner">
+
+  </target>
+</project>

@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ @author Copyright (c) 2007, @COPYRIGHT_CURRENTYEAR, Oracle and/or its affiliates. All rights reserved.
+ -->
+<project name="install-common" basedir=".">
+  <property environment="env"/>
+  
+  <taskdef name="derby" classname="weblogic.ant.taskdefs.derby.Derby"/>
+  
+  <target name="createDomain">
+    <property name="domain.name" value=""/>
+    <property name="domain.dir"  value=""/>
+    <mkdir dir="${wls.domain.dir}"/>
+    <delete dir="${domain.dir}"/>
+    <mkdir dir="${domain.dir}"/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="createCleanDomain.py
+      ${wls.template} ${domain.name} ${domain.dir} ${admin.server.host}
+      ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}"/>
+    </java>
+  </target>
+  
+  <target name="startAdminServer">
+    <property name="domain.name"  value=""/>
+    <property name="domain.dir"   value=""/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="startAdminServer.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}
+      ${domain.name} ${domain.dir} ${admin.server.jvmargs}"/>
+    </java>
+  </target>
+  
+  <target name="stopAdminServer">
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="shutdownAdminServer.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${admin.server.name}"/>
+    </java>
+  </target>
+  
+  <target name="startNodeManager">
+    <property name="domain.dir" value=""/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="startNodeManager.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${domain.dir}"/>
+    </java>
+  </target>
+  
+  <target name="startPartition">
+    <property name="partition.name" value=""/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="startPartition.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${partition.name}"/>
+    </java>
+  </target>
+  
+  <target name="stopNodeManager">
+    <property name="domain.name" value=""/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="false">
+      <arg line="stopNodeManager.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${domain.name}"/>
+    </java>
+  </target>
+  
+  <target name="derby.start">
+    <property name="derby.sys.home" value=""/>
+    <sleep seconds="10"/>
+    <echo message="starting derby..."/>
+    <derby operation="start"
+      systemhome="${derby.sys.home}"
+      port="1527">
+      <classpath>
+        <pathelement path="${derby.home}/lib/derby.jar"/>
+        <pathelement path="${derby.home}/lib/derbynet.jar"/>
+      </classpath>
+    </derby>
+    <sleep seconds="10"/>
+  </target>
+  
+  <target name="derby.stop">
+    <property name="derby.sys.home" value=""/>
+    <echo message="stopping derby..."/>
+    <derby operation="shutdown"
+      systemhome="${derby.sys.home}"
+      port="1527">
+      <classpath>
+        <pathelement path="${derby.home}/lib/derby.jar"/>
+        <pathelement path="${derby.home}/lib/derbynet.jar"/>
+      </classpath>
+    </derby>
+  </target>
+  
+  <target name="configureAppRGT">
+    <property name="dbDriver" value=""/>
+    <property name="rgtName"  value=""/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="configureRGT.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password}
+      ${dbDriver} ${rgtName}"/>
+    </java>
+  </target>
+  
+  <target name="addUserToRealm">
+    <property name="realmName"  value=""/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="createUser.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password} ${realmName}"/>
+    </java>
+  </target>
+  
+  <target name="updateAppearance">
+    <property name="appName"  value="medrec"/>
+    <property name="filePath"  value="plan.xml"/>
+    <property name="partition"  value=""/>
+    <java classname="weblogic.WLST" fork="true" resultproperty="resultCode" failOnError="true">
+      <arg line="updateApplication.py
+      ${admin.server.host} ${admin.server.port} ${admin.server.username} ${admin.server.password}
+      ${appName} ${filePath} ${partition}"/>
+    </java>
+  </target>
+  
+</project>

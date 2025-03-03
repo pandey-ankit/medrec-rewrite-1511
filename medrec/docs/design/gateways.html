@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <title>Gateways</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <link href="../../../docs/css/samples.css" rel="stylesheet" title="Style" type="text/css"/>
+  <script language="JavaScript" src="../../../docs/core/topicInfo.js"></script>
+  <script language="JavaScript" src="../../../docs/core/CookieClass.js" type="text/JavaScript"></script>
+  <script language="JavaScript" src="../../../docs/core/displayContent.js" type="text/JavaScript"></script>
+  <a href="../../../docs/core/index.html"></a>
+</head>
+
+<body>
+
+<script language="JavaScript" type="text/javascript">
+  displayInFrames();
+</script>
+
+<h1>
+  <script language="JavaScript" type="text/JavaScript">document.write(document.title); </script>
+</h1>
+<p class="style2">The <code>gateways</code> in MedRec are similar to the <code>repositories</code></span>,
+  because both of them encapsulate the Java EE APIs to access external resources. One can think of repositories as a
+  kind of gateway. The major difference between the two include:</p>
+<ul>
+  <li>Repositories encapsulate only persistence stores like relational databases, file stores, etc, while gateways
+    encapsulate other resources, including various middleware.
+  </li>
+  <li>Within MedRec, there are multiple repositories and each corresponds to an independent entity, but there is only
+    one generic gateway for each type (such as messaging or naming). These gateways come directly from the common
+    components; MedRec does not include any application-specific (or even use-case-specific) ones because the
+    application currently requires only simple gateways.
+  </li>
+</ul>
+<p>In MedRec, the gateways completely encapsulate the Java EE APIs including JMS, JNDI, JavaMail, and so on. See
+  sections on messaging, naming, mail, and so on in the <a href="javascript:reloadTOC('common-components.html')">Common
+    Components</a> chapter for the related details.<br/>
+</p>
+
+<p>&nbsp; </p>
+<hr/>
+<p>Copyright © 1996, 2019, Oracle and/or its affiliates. All rights
+  reserved. </p>
+
+</body>
+</html>

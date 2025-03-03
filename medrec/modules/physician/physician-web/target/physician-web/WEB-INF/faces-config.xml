@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<faces-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="https://jakarta.ee/xml/ns/jakartaee"
+              xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd"
+              version="3.0">
+
+
+  <lifecycle>
+    <phase-listener id="cacheControl">com.oracle.medrec.common.web.CacheControlPhaseListener</phase-listener>
+  </lifecycle>
+
+  <application>
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>en</supported-locale>
+    </locale-config>
+    <message-bundle>LocalizationResources</message-bundle>
+  </application>
+
+</faces-config>

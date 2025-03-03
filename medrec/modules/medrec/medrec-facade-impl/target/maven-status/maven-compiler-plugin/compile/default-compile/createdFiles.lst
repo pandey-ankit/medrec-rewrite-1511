@@ -1,0 +1,5 @@
+com/oracle/medrec/facade/impl/RecordFacadeImpl.class
+com/oracle/medrec/facade/impl/DrugFacadeImpl.class
+com/oracle/medrec/facade/impl/PhysicianFacadeImpl.class
+com/oracle/medrec/facade/broker/rmi/RmiPatientFacadeBroker.class
+com/oracle/medrec/facade/impl/PatientFacadeImpl.class

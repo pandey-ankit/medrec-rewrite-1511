@@ -1,0 +1,5 @@
+com/oracle/medrec/facade/broker/jaxrs/JaxRsPhysicianFacadeBroker.class
+com/oracle/medrec/facade/broker/jaxrs/ProviderExceptionMapper.class
+com/oracle/medrec/facade/broker/jaxrs/ProviderApplication.class
+com/oracle/medrec/facade/broker/jaxrs/JaxRsDrugFacadeBroker.class
+com/oracle/medrec/facade/broker/jaxrs/JaxRsRecordFacadeBroker.class

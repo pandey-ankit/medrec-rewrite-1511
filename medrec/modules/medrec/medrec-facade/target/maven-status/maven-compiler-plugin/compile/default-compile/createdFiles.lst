@@ -1,0 +1,14 @@
+com/oracle/medrec/facade/RecordFacade.class
+com/oracle/medrec/facade/model/RecordSummary.class
+com/oracle/medrec/facade/model/DrugInfo.class
+com/oracle/medrec/facade/model/FoundPatient.class
+com/oracle/medrec/facade/model/RecordToCreate.class
+com/oracle/medrec/facade/RmiPatientFacadeBrokerRemote.class
+com/oracle/medrec/facade/DrugFacade.class
+com/oracle/medrec/facade/PhysicianFacade.class
+com/oracle/medrec/facade/model/SummarizedRecord.class
+com/oracle/medrec/facade/model/AuthenticatedPhysician.class
+com/oracle/medrec/facade/model/RecordDetail.class
+com/oracle/medrec/facade/PatientFacade.class
+com/oracle/medrec/facade/model/TransferObject.class
+com/oracle/medrec/facade/JaxWsPatientFacade.class

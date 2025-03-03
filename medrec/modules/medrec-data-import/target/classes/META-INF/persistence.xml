@@ -1,34 +1,31 @@
 <?xml version="1.0"?>
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
-                               http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
-             version="2.1">
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
 
-    <persistence-unit name="MedRecDataImport" transaction-type="RESOURCE_LOCAL">
-     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-     <class>com.oracle.medrec.model.Address</class>
-     <class>com.oracle.medrec.model.BaseEntity</class>
-     <class>com.oracle.medrec.model.Drug</class>
-     <class>com.oracle.medrec.model.PersonName</class>
-     <class>com.oracle.medrec.model.Patient</class>
-     <class>com.oracle.medrec.model.Physician</class>
-     <class>com.oracle.medrec.model.Prescription</class>
-     <class>com.oracle.medrec.model.Record</class>
-     <class>com.oracle.medrec.model.RegularUser</class>
-     <class>com.oracle.medrec.model.User</class>
-     <class>com.oracle.medrec.model.VersionedEntity</class>
-     <class>com.oracle.medrec.model.VitalSigns</class>
-     <properties>
-       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
-       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/medrec;create=true"/>
-       <property name="javax.persistence.jdbc.password" value="medrec"/>
-       <property name="javax.persistence.jdbc.user" value="medrec"/>
-       <property name="javax.persistence.schema-generation.database.action"
-                      value="drop-and-create"/>
-       <!--hide the warning noise, especially when oracle database is used-->
-       <property name="eclipselink.logging.level" value="SEVERE"/>
-     </properties>
-   </persistence-unit>
-
+  <persistence-unit name="MedRecDataImport" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.oracle.medrec.model.Address</class>
+    <class>com.oracle.medrec.model.BaseEntity</class>
+    <class>com.oracle.medrec.model.PersonName</class>
+    <class>com.oracle.medrec.model.Patient</class>
+    <class>com.oracle.medrec.model.Physician</class>
+    <class>com.oracle.medrec.model.Drug</class>
+    <class>com.oracle.medrec.model.Prescription</class>
+    <class>com.oracle.medrec.model.Record</class>
+    <class>com.oracle.medrec.model.RegularUser</class>
+    <class>com.oracle.medrec.model.User</class>
+    <class>com.oracle.medrec.model.VersionedEntity</class>
+    <class>com.oracle.medrec.model.VitalSigns</class>
+    <properties>
+      <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:derby://localhost:1527/medrec;create=true"/>
+      <property name="jakarta.persistence.jdbc.password" value="medrec"/>
+      <property name="jakarta.persistence.jdbc.user" value="medrec"/>
+      <property name="jakarta.persistence.schema-generation.database.action"
+        value="drop-and-create"/>
+    </properties>
+    <shared-cache-mode>NONE</shared-cache-mode>
+  </persistence-unit>
 </persistence>

@@ -1,0 +1,7 @@
+com/oracle/medrec/service/impl/PhysicianServiceImplTestCase.class
+com/oracle/medrec/service/impl/DrugServiceImplTestCase.class
+com/oracle/medrec/service/impl/EntitiesPreparation.class
+com/oracle/medrec/service/impl/notification/PatientNotifierImplTestCase.class
+com/oracle/medrec/service/impl/PatientServiceImplTestCase.class
+com/oracle/medrec/service/impl/notification/PatientNotifierDelegateTestCase.class
+com/oracle/medrec/service/impl/RecordServiceImplTestCase.class

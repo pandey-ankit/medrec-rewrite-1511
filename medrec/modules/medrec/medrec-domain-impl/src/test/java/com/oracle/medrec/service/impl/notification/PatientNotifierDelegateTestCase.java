@@ -11,8 +11,8 @@ import static org.easymock.EasyMock.verify;
 
 import org.junit.jupiter.api.Test;
 
-import javax.jms.JMSException;
-import javax.jms.Queue;
+import jakarta.jms.JMSException;
+import jakarta.jms.Queue;
 
 /**
  * {@link PatientNotifierDelegate} test case.

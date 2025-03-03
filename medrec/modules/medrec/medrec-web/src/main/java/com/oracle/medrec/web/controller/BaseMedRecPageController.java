@@ -2,7 +2,7 @@ package com.oracle.medrec.web.controller;
 
 import com.oracle.medrec.common.web.PageContext;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

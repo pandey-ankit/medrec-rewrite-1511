@@ -1,19 +1,19 @@
 package com.oracle.medrec.common.messaging;
 
-import javax.ejb.EJB;
-import javax.ejb.Local;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
-import javax.jms.DeliveryMode;
-import javax.jms.Destination;
-import javax.jms.JMSConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.JMSProducer;
-import javax.jms.JMSRuntimeException;
-import javax.jms.Message;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Local;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.inject.Inject;
+import jakarta.jms.DeliveryMode;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSConnectionFactory;
+import jakarta.jms.JMSContext;
+import jakarta.jms.JMSException;
+import jakarta.jms.JMSProducer;
+import jakarta.jms.JMSRuntimeException;
+import jakarta.jms.Message;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

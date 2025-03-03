@@ -3,7 +3,7 @@ package com.oracle.medrec.service.impl;
 import com.oracle.medrec.model.Physician;
 import com.oracle.medrec.service.PhysicianService;
 
-import javax.ejb.Stateless;
+import jakarta.ejb.Stateless;
 
 /**
  * Physician buisness service implementation. which is responsible for all

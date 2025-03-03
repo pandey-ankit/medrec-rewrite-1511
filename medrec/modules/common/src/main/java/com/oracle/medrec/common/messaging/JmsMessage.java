@@ -1,6 +1,6 @@
 package com.oracle.medrec.common.messaging;
 
-import javax.jms.Destination;
+import jakarta.jms.Destination;
 import java.util.Set;
 
 /**

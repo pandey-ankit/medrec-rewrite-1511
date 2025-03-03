@@ -1,8 +1,9 @@
 package com.oracle.medrec.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @XmlRootElement
 public class VitalSigns implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 2907071444700296617L;
 
   @Column(name = "systolic_blood_pressure")

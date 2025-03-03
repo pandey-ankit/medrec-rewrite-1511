@@ -7,10 +7,10 @@ import com.oracle.medrec.facade.model.AuthenticatedPhysician;
 import com.oracle.medrec.model.Physician;
 import com.oracle.medrec.service.PhysicianService;
 
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.inject.Inject;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

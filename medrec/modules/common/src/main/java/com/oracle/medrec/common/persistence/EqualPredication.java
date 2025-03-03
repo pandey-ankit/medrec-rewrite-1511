@@ -1,8 +1,8 @@
 package com.oracle.medrec.common.persistence;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 /**
  * A predicate for testing the arguments for equality, namely '=' SQL.

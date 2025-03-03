@@ -4,7 +4,7 @@ import com.oracle.medrec.facade.model.RecordDetail;
 import com.oracle.medrec.facade.model.RecordSummary;
 import com.oracle.medrec.facade.model.RecordToCreate;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

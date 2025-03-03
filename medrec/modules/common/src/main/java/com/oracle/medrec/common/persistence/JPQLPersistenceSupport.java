@@ -2,9 +2,9 @@ package com.oracle.medrec.common.persistence;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 
 /**
  * Convenient JPA query language base class for generic repository (DAO).
@@ -83,8 +83,7 @@ public class JPQLPersistenceSupport {
     Query query = entityManager.createNamedQuery(namedQuery);
     int i = 1;
     for (Object propertyValue : propertyValues) {
-      if (propertyValue instanceof Property) {
-        Property property = (Property) propertyValue;
+      if (propertyValue instanceof Property property) {
         query.setParameter(property.name, property.value);
       } else {
         query.setParameter(i, propertyValue);

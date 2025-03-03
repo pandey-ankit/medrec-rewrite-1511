@@ -1,7 +1,7 @@
 package com.oracle.medrec.model;
 
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 
 /**
  * Base class from which every concrete entity requiring version for optimistic

@@ -2,7 +2,7 @@ package com.oracle.medrec.facade;
 
 import com.oracle.medrec.facade.model.DrugInfo;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 import java.util.List;
 
 /**

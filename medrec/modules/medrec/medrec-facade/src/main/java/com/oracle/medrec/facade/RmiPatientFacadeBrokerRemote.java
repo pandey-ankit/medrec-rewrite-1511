@@ -1,6 +1,6 @@
 package com.oracle.medrec.facade;
 
-import javax.ejb.Remote;
+import jakarta.ejb.Remote;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

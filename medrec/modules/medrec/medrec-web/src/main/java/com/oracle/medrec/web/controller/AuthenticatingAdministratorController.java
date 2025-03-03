@@ -4,11 +4,11 @@ import com.oracle.medrec.web.Constants;
 import com.oracle.medrec.web.login.Password;
 import com.oracle.medrec.web.login.Username;
 
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.logging.Logger;

@@ -2,13 +2,13 @@ package com.oracle.medrec.common.mail;
 
 import com.oracle.medrec.common.core.MethodParameterValidated;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import jakarta.mail.Message;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.logging.Logger;
 

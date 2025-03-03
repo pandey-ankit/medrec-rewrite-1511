@@ -3,12 +3,12 @@ package com.oracle.medrec.service.impl.notification;
 import com.oracle.medrec.common.messaging.JmsClient;
 import com.oracle.medrec.model.Patient;
 
-import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.jms.Queue;
+import jakarta.annotation.Resource;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.jms.Queue;
 
 /**
  * This Stateless Session Bean is regarded as a Message Client. The program of

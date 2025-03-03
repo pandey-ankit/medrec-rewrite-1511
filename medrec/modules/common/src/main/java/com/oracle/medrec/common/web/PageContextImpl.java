@@ -2,8 +2,8 @@ package com.oracle.medrec.common.web;
 
 import com.oracle.medrec.common.core.SystemException;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Locale;

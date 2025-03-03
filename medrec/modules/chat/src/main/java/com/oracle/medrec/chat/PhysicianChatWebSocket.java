@@ -1,9 +1,9 @@
 package com.oracle.medrec.chat;
 
-import javax.inject.Inject;
-import javax.websocket.*;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
+import jakarta.inject.Inject;
+import jakarta.websocket.*;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
 
 /**
  * Web socket server end point of physician of MedRec chat room based on

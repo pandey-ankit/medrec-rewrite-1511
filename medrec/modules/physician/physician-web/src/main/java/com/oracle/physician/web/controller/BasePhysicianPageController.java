@@ -2,7 +2,7 @@ package com.oracle.physician.web.controller;
 
 import com.oracle.medrec.common.web.PageContext;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * todo remove

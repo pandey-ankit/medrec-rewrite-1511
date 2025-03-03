@@ -8,10 +8,10 @@ import com.oracle.medrec.service.DuplicateUsernameException;
 import com.oracle.medrec.service.PatientService;
 import com.oracle.medrec.service.impl.notification.PatientNotifier;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 import java.util.List;
 
 /**

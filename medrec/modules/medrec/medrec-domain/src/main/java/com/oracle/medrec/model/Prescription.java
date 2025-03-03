@@ -1,10 +1,10 @@
 package com.oracle.medrec.model;
 
 import com.oracle.medrec.common.util.DateAdapter;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serial;
+import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,6 +17,7 @@ import java.util.Date;
 @Table(name = "prescriptions")
 public class Prescription extends VersionedEntity {
 
+  @Serial
   private static final long serialVersionUID = 4993043341973318975L;
 
   @Column(name = "date_prescribed")

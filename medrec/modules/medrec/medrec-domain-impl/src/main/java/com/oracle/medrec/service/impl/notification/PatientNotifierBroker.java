@@ -2,11 +2,11 @@ package com.oracle.medrec.service.impl.notification;
 
 import com.oracle.medrec.common.messaging.OneWayPayloadHandlerSupport;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.EJB;
-import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import jakarta.ejb.ActivationConfigProperty;
+import jakarta.ejb.EJB;
+import jakarta.ejb.MessageDriven;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

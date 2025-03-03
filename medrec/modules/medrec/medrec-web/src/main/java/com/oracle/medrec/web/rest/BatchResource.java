@@ -2,13 +2,13 @@ package com.oracle.medrec.web.rest;
 
 import com.oracle.medrec.service.FinanceService;
 
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.io.File;
 import java.util.logging.Logger;
 

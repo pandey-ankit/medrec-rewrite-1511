@@ -4,8 +4,8 @@ import com.oracle.medrec.model.Patient;
 import com.oracle.medrec.service.PatientService;
 import com.oracle.medrec.web.Constants;
 
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
 import java.util.List;
 
 /**

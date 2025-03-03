@@ -1,7 +1,7 @@
 package com.oracle.medrec.service.impl;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 
 import com.oracle.medrec.common.persistence.CriteriaPersistenceService;
 import com.oracle.medrec.common.persistence.CriteriaPersistenceSupport;

@@ -5,9 +5,9 @@ import com.oracle.medrec.model.Patient;
 import com.oracle.physician.service.PatientService;
 import com.oracle.physician.web.Constants;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

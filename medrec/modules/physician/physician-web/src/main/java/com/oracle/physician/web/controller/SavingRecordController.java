@@ -2,9 +2,9 @@ package com.oracle.physician.web.controller;
 
 import com.oracle.physician.service.RecordService;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * CreatingRecordController is a JSF ManagedBean that is responsible for

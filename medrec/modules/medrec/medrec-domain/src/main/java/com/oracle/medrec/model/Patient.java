@@ -1,8 +1,10 @@
 package com.oracle.medrec.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import com.oracle.medrec.model.Record;
+import java.io.Serial;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @Table(name = "patients")
 public class Patient extends RegularUser {
 
+  @Serial
   private static final long serialVersionUID = 313728838021028177L;
 
   @Temporal(TemporalType.DATE)

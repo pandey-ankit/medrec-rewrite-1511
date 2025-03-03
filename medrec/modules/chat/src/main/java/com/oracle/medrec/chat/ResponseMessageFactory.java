@@ -1,9 +1,9 @@
 package com.oracle.medrec.chat;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.websocket.Session;
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.websocket.Session;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;

@@ -2,9 +2,9 @@ package com.oracle.medrec.chat;
 
 import com.oracle.medrec.chat.eliza.ElizaService;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.websocket.Session;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.websocket.Session;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;

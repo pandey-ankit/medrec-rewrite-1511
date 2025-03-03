@@ -1,11 +1,11 @@
 package com.oracle.medrec.util;
 
 import com.oracle.medrec.model.*;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import com.oracle.medrec.model.Record;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import java.math.BigDecimal;
 import java.util.Calendar;
 

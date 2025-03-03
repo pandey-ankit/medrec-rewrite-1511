@@ -10,4 +10,17 @@
 	</parent>
 	<artifactId>medrec-domain</artifactId>
 	<name>medrec-domain</name>
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>4.0.5</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 </project>

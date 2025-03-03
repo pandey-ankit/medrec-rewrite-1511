@@ -3,11 +3,11 @@ package com.oracle.medrec.service.impl;
 import com.oracle.medrec.service.FinanceService;
 import com.oracle.medrec.service.batch.BatchConstants;
 
-import javax.batch.operations.JobOperator;
-import javax.batch.runtime.BatchRuntime;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import jakarta.batch.operations.JobOperator;
+import jakarta.batch.runtime.BatchRuntime;
+import jakarta.ejb.Schedule;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

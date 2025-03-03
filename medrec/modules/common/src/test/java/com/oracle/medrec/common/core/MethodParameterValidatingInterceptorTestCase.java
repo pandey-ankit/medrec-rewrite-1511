@@ -2,7 +2,7 @@ package com.oracle.medrec.common.core;
 
 import org.junit.jupiter.api.Test;
 
-import javax.interceptor.InvocationContext;
+import jakarta.interceptor.InvocationContext;
 import java.lang.reflect.Method;
 
 import static org.easymock.EasyMock.*;

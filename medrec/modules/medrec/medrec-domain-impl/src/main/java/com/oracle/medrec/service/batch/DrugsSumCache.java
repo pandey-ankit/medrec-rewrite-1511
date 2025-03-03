@@ -3,7 +3,7 @@ package com.oracle.medrec.service.batch;
 import com.oracle.medrec.model.Drug;
 import com.oracle.medrec.model.Prescription;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;

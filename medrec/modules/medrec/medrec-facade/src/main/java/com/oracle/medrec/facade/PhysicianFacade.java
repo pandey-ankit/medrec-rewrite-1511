@@ -2,7 +2,7 @@ package com.oracle.medrec.facade;
 
 import com.oracle.medrec.facade.model.AuthenticatedPhysician;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

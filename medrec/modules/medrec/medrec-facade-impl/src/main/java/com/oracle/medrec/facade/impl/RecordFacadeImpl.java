@@ -9,10 +9,10 @@ import com.oracle.medrec.facade.model.RecordToCreate;
 import com.oracle.medrec.model.Record;
 import com.oracle.medrec.service.RecordService;
 
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.inject.Inject;
 import java.util.List;
 
 /**

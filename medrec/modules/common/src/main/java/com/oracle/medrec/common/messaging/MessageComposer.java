@@ -1,8 +1,8 @@
 package com.oracle.medrec.common.messaging;
 
-import javax.jms.JMSContext;
-import javax.jms.JMSException;
-import javax.jms.Message;
+import jakarta.jms.JMSContext;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 
 /**
  * A util composing and extracting JMS message.

@@ -2,7 +2,7 @@ package com.oracle.medrec.service;
 
 import com.oracle.medrec.model.Physician;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 /**
  * Physician business service interface.

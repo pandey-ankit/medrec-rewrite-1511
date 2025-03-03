@@ -1,7 +1,7 @@
 package com.oracle.medrec.model;
 
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.Size;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.Size;
 
 /**
  * Base class defining properties common to any regular users (not including

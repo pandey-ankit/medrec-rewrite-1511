@@ -6,8 +6,8 @@ import com.oracle.medrec.model.Record;
 import com.oracle.medrec.service.RecordService;
 import com.oracle.medrec.web.Constants;
 
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;

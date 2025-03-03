@@ -5,11 +5,11 @@ import com.oracle.medrec.facade.model.DrugInfo;
 import com.oracle.physician.JaxRsProperties;
 import com.oracle.physician.service.DrugService;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.net.URI;
 import java.util.List;
 import java.util.logging.Logger;

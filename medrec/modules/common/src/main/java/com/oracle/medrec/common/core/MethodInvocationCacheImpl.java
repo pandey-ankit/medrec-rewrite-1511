@@ -1,9 +1,9 @@
 package com.oracle.medrec.common.core;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;

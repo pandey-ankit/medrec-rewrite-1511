@@ -6,10 +6,10 @@ import com.oracle.medrec.service.DuplicateUsernameException;
 import com.oracle.medrec.service.PatientService;
 import com.oracle.medrec.web.Constants;
 
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

@@ -1,8 +1,9 @@
 package com.oracle.medrec.model;
 
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Embeddable
 public class PersonName implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 5610658213331393425L;
 
   @NotNull

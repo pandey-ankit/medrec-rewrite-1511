@@ -3,8 +3,8 @@ package com.oracle.medrec.facade;
 import com.oracle.medrec.facade.model.FoundPatient;
 import com.oracle.medrec.model.Patient;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebService;
 import java.util.List;
 
 /**

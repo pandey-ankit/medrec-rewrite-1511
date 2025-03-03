@@ -1,7 +1,7 @@
 package com.oracle.medrec.common.persistence;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.criteria.CriteriaBuilder;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 /**
  * Business service utilizes {@link CriteriaPersistenceSupport} to query

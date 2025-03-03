@@ -64,7 +64,7 @@ public class RecordServiceImplTestCase extends EntityRepositoryTestCaseSupport<R
   @Test
   public void testGetRecordsByPatientId() {
     List<Record> rd = service.getRecordsByPatientId(patient.getId());
-    assertEquals(rd.get(0).getId(), record.getId());
+    assertEquals(rd.getFirst().getId(), record.getId());
   }
 
   @Test

@@ -7,10 +7,11 @@ import com.oracle.medrec.model.Patient;
 import com.oracle.physician.JaxWsProperties;
 import com.oracle.physician.service.PatientService;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
+import jakarta.xml.ws.Service;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PatientServiceDelegate implements PatientService {
     if (patientFacade == null) {
       URL url = null;
       try {
-        url = new URL(patientFacadeServiceWsdlLocation);
+        url = URI.create(patientFacadeServiceWsdlLocation).toURL();
       } catch (MalformedURLException e) {
         e.printStackTrace();
       }

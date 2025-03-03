@@ -4,10 +4,10 @@ import com.oracle.medrec.common.persistence.BasePersistenceService;
 import com.oracle.medrec.common.persistence.JPQLPersistenceSupport;
 import com.oracle.medrec.model.*;
 import com.oracle.medrec.service.RecordService;
-
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import  com.oracle.medrec.model.Record;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 import java.util.Date;
 import java.util.List;
 

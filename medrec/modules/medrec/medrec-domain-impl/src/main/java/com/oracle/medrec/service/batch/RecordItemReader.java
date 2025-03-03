@@ -3,11 +3,11 @@ package com.oracle.medrec.service.batch;
 import com.oracle.medrec.model.Record;
 import com.oracle.medrec.service.RecordService;
 
-import javax.batch.api.chunk.AbstractItemReader;
-import javax.batch.runtime.BatchRuntime;
-import javax.batch.runtime.context.JobContext;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.batch.api.chunk.AbstractItemReader;
+import jakarta.batch.runtime.BatchRuntime;
+import jakarta.batch.runtime.context.JobContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Iterator;

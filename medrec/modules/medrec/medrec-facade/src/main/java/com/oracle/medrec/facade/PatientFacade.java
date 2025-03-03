@@ -3,7 +3,7 @@ package com.oracle.medrec.facade;
 import com.oracle.medrec.facade.model.FoundPatient;
 import com.oracle.medrec.model.Patient;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 import java.util.List;
 
 /**

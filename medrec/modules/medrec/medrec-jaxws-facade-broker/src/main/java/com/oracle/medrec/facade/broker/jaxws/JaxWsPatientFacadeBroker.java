@@ -5,8 +5,8 @@ import com.oracle.medrec.facade.PatientFacade;
 import com.oracle.medrec.facade.model.FoundPatient;
 import com.oracle.medrec.model.Patient;
 
-import javax.inject.Inject;
-import javax.jws.WebService;
+import jakarta.inject.Inject;
+import jakarta.jws.WebService;
 import java.util.List;
 
 /**

@@ -4,8 +4,8 @@ import com.oracle.medrec.model.Record;
 import com.oracle.medrec.service.RecordService;
 import com.oracle.medrec.web.Constants;
 
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
 import java.util.logging.Logger;
 
 /**
@@ -43,7 +43,7 @@ public class ViewingRecordDetailController extends BaseMedRecPageController {
     LOGGER.finer("Temperature: " + record.getVitalSigns().getTemperature());
     LOGGER.finer("Number of prescriptions: " + record.getPrescriptions().size());
     if (record.getPrescriptions().size() > 0) {
-      LOGGER.finer("Drug of the 1st prescription: " + record.getPrescriptions().get(0).getDrug());
+      LOGGER.finer("Drug of the 1st prescription: " + record.getPrescriptions().getFirst().getDrug());
     }
     return Constants.VIEW_RECORD_DETAIL;
   }

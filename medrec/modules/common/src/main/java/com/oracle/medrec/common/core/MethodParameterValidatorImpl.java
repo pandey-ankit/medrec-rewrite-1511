@@ -1,6 +1,6 @@
 package com.oracle.medrec.common.core;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 

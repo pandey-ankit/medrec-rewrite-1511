@@ -3,12 +3,12 @@ package com.oracle.physician.web.controller;
 import com.oracle.medrec.facade.model.DrugInfo;
 import com.oracle.physician.service.DrugService;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.faces.model.SelectItem;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.faces.model.SelectItem;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 

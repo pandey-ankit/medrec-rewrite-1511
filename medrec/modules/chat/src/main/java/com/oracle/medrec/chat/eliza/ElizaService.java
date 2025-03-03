@@ -1,6 +1,6 @@
 package com.oracle.medrec.chat.eliza;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Eliza Service the portal of chat.

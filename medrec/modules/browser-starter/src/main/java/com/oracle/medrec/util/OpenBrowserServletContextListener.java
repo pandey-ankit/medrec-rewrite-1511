@@ -2,9 +2,9 @@ package com.oracle.medrec.util;
 
 import java.net.URI;
 import java.awt.*;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 import javax.naming.InitialContext;
 import javax.management.AttributeChangeNotification;
 import javax.management.AttributeChangeNotificationFilter;
@@ -98,8 +98,7 @@ public class OpenBrowserServletContextListener implements ServletContextListener
         mbeanServer.addNotificationListener(serverRuntime, new NotificationListener() {
               @Override
               public void handleNotification(Notification notification, Object handback) {
-                if (notification instanceof AttributeChangeNotification) {
-                  AttributeChangeNotification attributeChange = (AttributeChangeNotification) notification;
+                if (notification instanceof AttributeChangeNotification attributeChange) {
                   if (RUNNING_STATE.equalsIgnoreCase((String) attributeChange.getNewValue())) {
                     browseTo(httpURL + contextPath + "/" + page);
                   }

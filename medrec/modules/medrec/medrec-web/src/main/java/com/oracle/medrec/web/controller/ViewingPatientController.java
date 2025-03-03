@@ -6,9 +6,9 @@ import com.oracle.medrec.service.DuplicateSsnException;
 import com.oracle.medrec.service.PatientService;
 import com.oracle.medrec.web.Constants;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
 
 /**
  * JSF managed bean for updating patient profile.

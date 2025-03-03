@@ -1,7 +1,7 @@
 package com.oracle.medrec.common.messaging;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

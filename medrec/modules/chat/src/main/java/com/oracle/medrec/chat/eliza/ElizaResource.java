@@ -2,7 +2,7 @@ package com.oracle.medrec.chat.eliza;
 
 import com.oracle.medrec.chat.eliza.ReplaceEntity.Type;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

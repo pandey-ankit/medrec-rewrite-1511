@@ -1,6 +1,6 @@
 package com.oracle.medrec.service;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 /**
  * Cost statistic business service interface.

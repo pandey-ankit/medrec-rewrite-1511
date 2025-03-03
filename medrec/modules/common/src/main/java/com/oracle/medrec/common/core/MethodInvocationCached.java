@@ -1,6 +1,6 @@
 package com.oracle.medrec.common.core;
 
-import javax.interceptor.InterceptorBinding;
+import jakarta.interceptor.InterceptorBinding;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 

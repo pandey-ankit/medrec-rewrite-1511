@@ -2,10 +2,10 @@ package com.oracle.medrec.common.messaging;
 
 import com.oracle.medrec.common.core.ThrowableLogged;
 
-import javax.ejb.EJB;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
+import jakarta.ejb.EJB;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.MessageListener;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its

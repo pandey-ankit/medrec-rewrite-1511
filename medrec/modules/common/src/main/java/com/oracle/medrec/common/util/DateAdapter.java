@@ -3,7 +3,7 @@ package com.oracle.medrec.common.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * @author Xiaojun Wu. <br>

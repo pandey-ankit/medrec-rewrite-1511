@@ -9,14 +9,14 @@ import com.oracle.physician.JaxRsProperties;
 import com.oracle.physician.PhysicianSystemException;
 import com.oracle.physician.service.RecordService;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.event.Event;
+import jakarta.inject.Inject;
 import java.net.URI;
 
 /**

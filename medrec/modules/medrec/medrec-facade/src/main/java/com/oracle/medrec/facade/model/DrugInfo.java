@@ -1,8 +1,8 @@
 package com.oracle.medrec.facade.model;
 
 import com.oracle.medrec.model.Drug;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serial;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author : xiaojwu.
@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class DrugInfo extends TransferObject {
 
+  @Serial
   private static final long serialVersionUID = 338578453534L;
 
   private Long id;

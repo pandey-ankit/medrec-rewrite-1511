@@ -1,7 +1,7 @@
 package com.oracle.medrec.web.controller;
 
-import javax.enterprise.inject.Model;
-import javax.faces.model.SelectItem;
+import jakarta.enterprise.inject.Model;
+import jakarta.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
 

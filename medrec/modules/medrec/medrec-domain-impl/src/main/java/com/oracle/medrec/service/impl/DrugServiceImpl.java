@@ -5,7 +5,7 @@ import com.oracle.medrec.common.persistence.JPQLPersistenceSupport;
 import com.oracle.medrec.model.Drug;
 import com.oracle.medrec.service.DrugService;
 
-import javax.ejb.Stateless;
+import jakarta.ejb.Stateless;
 import java.util.List;
 
 /**

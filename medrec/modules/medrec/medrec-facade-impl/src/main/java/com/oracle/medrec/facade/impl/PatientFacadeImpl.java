@@ -7,10 +7,10 @@ import com.oracle.medrec.facade.model.FoundPatient;
 import com.oracle.medrec.model.Patient;
 import com.oracle.medrec.service.PatientService;
 
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
 

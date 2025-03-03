@@ -4,10 +4,10 @@ import com.oracle.medrec.common.util.DateAdapter;
 import com.oracle.medrec.model.Prescription;
 import com.oracle.medrec.model.Record;
 import com.oracle.medrec.model.VitalSigns;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serial;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.List;
 @XmlRootElement
 public class RecordDetail extends TransferObject {
 
+  @Serial
   private static final long serialVersionUID = -98237492374L;
 
   private Long id;

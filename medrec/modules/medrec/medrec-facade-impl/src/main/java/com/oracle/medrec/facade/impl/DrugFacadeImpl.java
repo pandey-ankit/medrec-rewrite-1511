@@ -10,10 +10,10 @@ import com.oracle.medrec.facade.model.DrugInfo;
 import com.oracle.medrec.model.Drug;
 import com.oracle.medrec.service.DrugService;
 
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 

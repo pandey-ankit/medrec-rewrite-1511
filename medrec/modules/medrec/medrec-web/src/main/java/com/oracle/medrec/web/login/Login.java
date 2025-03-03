@@ -4,9 +4,9 @@
  */
 package com.oracle.medrec.web.login;
 
-import javax.enterprise.inject.Model;
-import javax.enterprise.inject.Produces;
-import javax.validation.constraints.NotNull;
+import jakarta.enterprise.inject.Model;
+import jakarta.enterprise.inject.Produces;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * CDI Model Bean Class.

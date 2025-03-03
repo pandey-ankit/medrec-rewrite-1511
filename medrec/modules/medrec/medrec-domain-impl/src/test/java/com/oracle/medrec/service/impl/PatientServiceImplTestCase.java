@@ -75,7 +75,7 @@ public class PatientServiceImplTestCase extends EntityRepositoryTestCaseSupport<
   @Test
   public void testFindApprovedPatientsByLastName() {
     List<Patient> user = service.findApprovedPatientsByLastName(patient.getName().getLastName());
-    assertEquals(patient.getUsername(), user.get(0).getUsername());
+    assertEquals(patient.getUsername(), user.getFirst().getUsername());
   }
 
   @Test
@@ -123,7 +123,7 @@ public class PatientServiceImplTestCase extends EntityRepositoryTestCaseSupport<
     patient.setStatus(Patient.Status.REGISTERED);
     service.getEntityManager().merge(patient);
     List<Patient> user = service.getNewlyRegisteredPatients();
-    assertEquals(patient.getId(), user.get(0).getId());
+    assertEquals(patient.getId(), user.getFirst().getId());
   }
 
   @Test
@@ -144,13 +144,13 @@ public class PatientServiceImplTestCase extends EntityRepositoryTestCaseSupport<
   @Test
   public void testFuzzyFindApprovedPatientsByLastNameAndSsn() {
     List<Patient> user = service.fuzzyFindApprovedPatientsByLastNameAndSsn("la", "");
-    assertEquals(patient.getId(), user.get(0).getId());
+    assertEquals(patient.getId(), user.getFirst().getId());
 
     user = service.fuzzyFindApprovedPatientsByLastNameAndSsn("", "SS");
-    assertEquals(patient.getId(), user.get(0).getId());
+    assertEquals(patient.getId(), user.getFirst().getId());
 
     user = service.fuzzyFindApprovedPatientsByLastNameAndSsn("la", "S");
-    assertEquals(patient.getId(), user.get(0).getId());
+    assertEquals(patient.getId(), user.getFirst().getId());
 
     user = service.fuzzyFindApprovedPatientsByLastNameAndSsn("ee", "we");
     assertEquals(0, user.size());

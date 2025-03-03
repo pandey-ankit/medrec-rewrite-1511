@@ -2,11 +2,11 @@ package com.oracle.medrec.service.batch;
 
 import com.oracle.medrec.model.Record;
 
-import javax.annotation.PostConstruct;
-import javax.batch.api.chunk.ItemProcessor;
-import javax.batch.runtime.context.StepContext;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.batch.api.chunk.ItemProcessor;
+import jakarta.batch.runtime.context.StepContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.logging.Logger;
 
 /**

@@ -3,12 +3,12 @@ package com.oracle.medrec.service.batch;
 import com.oracle.medrec.model.Prescription;
 import com.oracle.medrec.model.Record;
 
-import javax.batch.api.chunk.AbstractItemWriter;
-import javax.batch.runtime.BatchRuntime;
-import javax.batch.runtime.context.JobContext;
-import javax.batch.runtime.context.StepContext;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.batch.api.chunk.AbstractItemWriter;
+import jakarta.batch.runtime.BatchRuntime;
+import jakarta.batch.runtime.context.JobContext;
+import jakarta.batch.runtime.context.StepContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

@@ -4,8 +4,8 @@ import com.oracle.medrec.facade.model.FoundPatient;
 import com.oracle.physician.service.PatientService;
 import com.oracle.physician.web.Constants;
 
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Model;
+import jakarta.inject.Inject;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;

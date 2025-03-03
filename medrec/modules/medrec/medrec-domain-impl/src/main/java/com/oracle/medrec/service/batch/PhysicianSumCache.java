@@ -3,7 +3,7 @@ package com.oracle.medrec.service.batch;
 import com.oracle.medrec.model.Physician;
 import com.oracle.medrec.model.Record;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;

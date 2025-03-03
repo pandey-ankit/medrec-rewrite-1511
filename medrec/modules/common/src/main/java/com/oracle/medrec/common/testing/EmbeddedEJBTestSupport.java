@@ -2,7 +2,7 @@ package com.oracle.medrec.common.testing;
 
 import java.util.HashMap;
 
-import javax.ejb.embeddable.EJBContainer;
+import jakarta.ejb.embeddable.EJBContainer;
 import javax.naming.Context;
 import javax.naming.NamingException;
 

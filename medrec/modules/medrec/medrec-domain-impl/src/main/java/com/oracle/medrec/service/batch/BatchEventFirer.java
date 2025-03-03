@@ -1,7 +1,7 @@
 package com.oracle.medrec.service.batch;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
+import jakarta.enterprise.event.Event;
+import jakarta.inject.Inject;
 import java.io.File;
 import java.util.Properties;
 

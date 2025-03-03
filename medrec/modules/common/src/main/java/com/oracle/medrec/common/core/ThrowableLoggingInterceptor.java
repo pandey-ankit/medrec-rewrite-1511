@@ -1,10 +1,10 @@
 package com.oracle.medrec.common.core;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.Interceptor;
+import jakarta.interceptor.InvocationContext;
 import java.util.logging.Logger;
 
 /**
@@ -35,8 +35,8 @@ public class ThrowableLoggingInterceptor {
       return invocationContext.proceed();
     } catch (Throwable t) {
       throwableLogger.log(t);
-      if (t instanceof Exception) {
-        throw (Exception) t;
+      if (t instanceof Exception exception) {
+        throw exception;
       } else {
         throw (Error) t;
       }

@@ -1,6 +1,6 @@
 package com.oracle.medrec.common.web;
 
-import javax.faces.context.FacesContext;
+import jakarta.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Map;
 

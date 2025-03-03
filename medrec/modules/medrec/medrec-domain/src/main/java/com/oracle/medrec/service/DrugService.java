@@ -2,7 +2,7 @@ package com.oracle.medrec.service;
 
 import com.oracle.medrec.model.Drug;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 import java.util.List;
 
 /**

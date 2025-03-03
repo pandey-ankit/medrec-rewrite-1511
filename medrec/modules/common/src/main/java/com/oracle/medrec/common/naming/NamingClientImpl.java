@@ -3,9 +3,9 @@ package com.oracle.medrec.common.naming;
 import com.oracle.medrec.common.core.MethodParameterValidated;
 import com.oracle.medrec.common.util.ClassUtils;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
 import javax.naming.InitialContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;

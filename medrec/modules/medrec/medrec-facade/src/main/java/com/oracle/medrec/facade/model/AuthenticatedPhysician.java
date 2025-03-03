@@ -2,8 +2,8 @@ package com.oracle.medrec.facade.model;
 
 import com.oracle.medrec.model.PersonName;
 import com.oracle.medrec.model.Physician;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serial;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Copyright (c) 2007, 2019, Oracle and/or its
@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class AuthenticatedPhysician extends TransferObject {
 
+  @Serial
   private static final long serialVersionUID = 654351313L;
 
   private Long id;

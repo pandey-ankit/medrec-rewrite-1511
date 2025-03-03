@@ -1,0 +1,17 @@
+com/oracle/medrec/common/core/MethodParameterValidatingInterceptorTestCase.class
+com/oracle/medrec/common/core/MethodParameterValidatorImplTestCase.class
+com/oracle/medrec/common/util/ClassUtilsTestCase.class
+com/oracle/medrec/common/naming/CachingNamingClientDecoratorTestCase.class
+com/oracle/medrec/common/core/MockInvocationContext.class
+com/oracle/medrec/common/util/ClassUtilsTestCase$Parent.class
+com/oracle/medrec/common/util/ClassUtilsTestCase$AnotherChild.class
+com/oracle/medrec/common/core/MethodInvocationCacheImplTestCase.class
+com/oracle/medrec/common/util/ThrowableUtilsTestCase.class
+com/oracle/medrec/common/util/StringUtilsTestCase.class
+com/oracle/medrec/common/util/ClassUtilsTestCase$Child.class
+com/oracle/medrec/common/core/MethodInvocationCachingInterceptorTestCase.class
+com/oracle/medrec/common/core/ThrowableLoggingInterceptorTestCase.class
+com/oracle/medrec/common/messaging/TestMessageConverterImpl.class
+com/oracle/medrec/common/messaging/TestMessageGatewayImpl.class
+com/oracle/medrec/common/core/ThrowableLoggingInterceptorTestCase$FooException.class
+com/oracle/medrec/common/core/MethodParameterValidatorImplTestCase$Foo.class

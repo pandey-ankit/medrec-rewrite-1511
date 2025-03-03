@@ -1,17 +1,17 @@
 package com.oracle.medrec.service.batch;
 
-import javax.batch.api.Batchlet;
-import javax.batch.runtime.BatchStatus;
-import javax.batch.runtime.context.StepContext;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.batch.api.Batchlet;
+import jakarta.batch.runtime.BatchStatus;
+import jakarta.batch.runtime.context.StepContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.text.NumberFormat;
 import java.util.logging.Logger;
 
 /**
- * A {@link javax.batch.api.Batchlet} for drug statistic creating drug report.
+ * A {@link jakarta.batch.api.Batchlet} for drug statistic creating drug report.
  *
  * @author Copyright (c) 2007, 2019, Oracle and/or its
  *         affiliates. All rights reserved.<br>

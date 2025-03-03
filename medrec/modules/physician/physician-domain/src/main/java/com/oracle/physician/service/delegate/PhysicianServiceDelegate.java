@@ -5,12 +5,12 @@ import com.oracle.medrec.facade.model.AuthenticatedPhysician;
 import com.oracle.physician.JaxRsProperties;
 import com.oracle.physician.service.PhysicianService;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.Serializable;
 import java.net.URI;
 

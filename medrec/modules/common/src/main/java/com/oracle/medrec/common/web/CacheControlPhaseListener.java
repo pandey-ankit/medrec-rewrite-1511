@@ -1,10 +1,11 @@
 package com.oracle.medrec.common.web;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseListener;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.PhaseEvent;
+import jakarta.faces.event.PhaseId;
+import jakarta.faces.event.PhaseListener;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.Serial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
  */
 public class CacheControlPhaseListener implements PhaseListener {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = Logger.getLogger(CacheControlPhaseListener.class.getName());

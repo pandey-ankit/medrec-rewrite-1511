@@ -1,10 +1,10 @@
 package com.oracle.medrec.service.batch;
 
-import javax.batch.api.listener.AbstractStepListener;
-import javax.batch.runtime.BatchRuntime;
-import javax.batch.runtime.context.JobContext;
-import javax.batch.runtime.context.StepContext;
-import javax.inject.Inject;
+import jakarta.batch.api.listener.AbstractStepListener;
+import jakarta.batch.runtime.BatchRuntime;
+import jakarta.batch.runtime.context.JobContext;
+import jakarta.batch.runtime.context.StepContext;
+import jakarta.inject.Inject;
 import java.util.Properties;
 import java.util.logging.Logger;
 

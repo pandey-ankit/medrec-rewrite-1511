@@ -1,6 +1,6 @@
 package com.oracle.medrec.common.persistence;
 
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 /**
  * {@link Predication} factory.
